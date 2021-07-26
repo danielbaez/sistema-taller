@@ -1,0 +1,73 @@
+@media screen and (max-width: 992px) {
+	div.dataTables_wrapper>.row>div[class^="col-"] {
+		/*padding: 0;*/
+	}
+	.content-header {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.content {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+	}
+}
+@media screen and (max-width: 767px) {
+	div.dataTables_length {
+	    text-align: left !important;
+	}
+}
+@media screen and (max-width: 575px) {
+	div.dataTables_length {
+	    text-align: center !important;
+	}
+}
+
+.dataTables_wrapper .dataTables_paginate .pagination {
+	margin-top: 12px !important;
+	justify-content: center !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+	padding: 0 !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  	border-color: transparent !important;
+  	background: none !important;
+}
+/*.dataTables_filter {
+	display: none;
+}*/
+/*.dt-buttons {
+	width: 100%;
+	flex: 1 1 0px;
+}
+.dt-buttons > * {
+	flex: 1 !important;
+}*/
+.icon-export {
+	font-size: 1.3em;
+}
+table.dataTable {
+	width: 100% !important;
+	margin-top: 10px !important;
+	margin-bottom: 0 !important;
+}
+div.dataTables_wrapper>div:first-child.row>div[class^="col-"]:first-child {
+	/*padding: 0;*/
+}
+div.dataTables_wrapper>div:first-child.row>div[class^="col-"]:last-child {
+	/*padding: 0;*/
+}
+.table.dataTable thead, tbody {
+	text-align: center;
+}
+
+.dtr-control {
+	vertical-align: middle !important;
+}
+
+
+
+
+.filters {
+	margin-top: 18px !important;
+}
