@@ -13,10 +13,6 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     /**
      * Show the application dashboard.
@@ -25,7 +21,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return redirect()->route('login');        
+    }
+
+    public function dashboard()
+    {
+        return view('dashboard');
     }
 
     public function users(Request $request)
@@ -33,7 +34,8 @@ class HomeController extends Controller
         if($request->ajax())
         {
             //dd(request('aaa'));
-            $data = User::latest();
+            //$data = User::get();
+            $data = User::orderBy('id', 'desc')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->filter(function ($query) use ($request) {
@@ -59,6 +61,6 @@ class HomeController extends Controller
 
         //$profiles = Profile::all();
       
-        return view('profiles.index');
+        return view('home');
     }
 }

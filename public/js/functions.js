@@ -1,4 +1,285 @@
-function dataTableServerSide(tableId, tableColumns, fileName, titleFile, orientationPdf, pageSize, openDownload, sameColumnsWidth, header, footer, messageTop='', appendInTitle='', method='GET', dataForm='') {
+function dataTableClientSide(tableId, tableColumns, fileName, titleFile, orientationPdf, pageSize, openDownload, sameColumnsWidth, header, footer, showLength, showButtons, showInfo, messageTop='', appendInTitle='', method='GET', dataForm='') {
+	if(!tableId) {
+		tableId = 'my-table';
+	}
+
+	fileName = fileName.toLowerCase();
+    fileName = fileName.replace(/\s/g, "-");
+    titleFile = titleFile.toUpperCase();
+
+    var exportColumns = [];
+
+    if(!tableColumns) {
+    	tableColumns = [];
+    }
+    if(tableColumns.length == 0) {
+	    $('#'+tableId+' thead tr th').each(function(index, th) {
+	        var data_data = $(th).attr('data-data');
+
+	        var data_export = $(th).attr('data-export');
+	        data_export = data_export != undefined ? JSON.parse(data_export.replace(/'/g, '"')) : true;
+
+	        var data_orderable = $(th).attr('data-orderable');
+	        data_orderable = data_orderable != undefined ? JSON.parse(data_orderable.replace(/'/g, '"')) : true;
+
+	        var data_searchable = $(th).attr('data-searchable');
+	        data_searchable = data_searchable != undefined ? JSON.parse(data_searchable.replace(/'/g, '"')) : true;
+
+	        tableColumns.push({
+	            data: data_data,
+	            export: data_export,
+	            orderable: data_orderable,
+	            searchable: data_searchable
+	        });
+
+	        if(data_export) {
+	        	exportColumns.push(index);
+	        }
+	    });
+	}
+
+	console.log(exportColumns)
+
+    for(var key in tableColumns) {
+	    if(tableColumns[key].hasOwnProperty('export')) {
+	    	if(tableColumns[key].export === true || tableColumns[key].export.hasOwnProperty('data')) {
+	    		$("#"+tableId+" thead tr th:eq("+key+")").addClass('col-export');
+	    	}
+
+	        delete tableColumns[key].export;
+	    }
+	}
+
+	$.fn.dataTable.ext.errMode = 'throw';
+	//$.fn.dataTable.ext.errMode = 'none';
+
+	//var dom = "<'row'<'col-12 order-1 mt-2 order-sm-0 mt-sm-0 col-sm-7 col-md-7'l><'col-8 offset-2 order-0 order-sm-1 col-sm-5 offset-sm-0 col-md-5 text-right'B>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 text-center'i>><'row'<'col-sm-12'p>>";
+
+	var dom = "<'row'";
+	
+	if(showLength && showButtons) {
+		dom += "<'col-12 order-1 mt-2 order-sm-0 mt-sm-0 col-sm-7 col-md-7'l>";
+		dom += "<'col-8 offset-2 order-0 order-sm-1 col-sm-5 offset-sm-0 col-md-5 text-right'B>";
+	}
+	else if(showLength && !showButtons) {
+		dom += "<'col-12 order-1 mt-2 order-sm-0 mt-sm-0 col-sm-7 col-md-7'l>";
+	}
+	else if(!showLength && showButtons) {
+		dom += "<'col-8 offset-2 offset-md-0 col-md-12 text-right'B>";
+	}
+	
+	dom += ">";
+
+	if(!showLength && !showButtons) {
+		dom = "";
+	}
+
+	dom += "<'row'<'col-sm-12'tr>>";
+
+	if(showInfo) {
+		dom += "<'row mt-2 mb-2'<'col-12 mb-3 col-md-12 col-lg-5 mb-lg-0'i><'col-12 col-md-12 col-lg-7 text-right'p>>";
+	}else {
+		dom += "<'row mt-2 mb-2'<'col-12 col-md-12 col-lg-12 text-right'p>>";
+	}
+
+	if(showLength) {
+		var lengthMenu = [[10, 25, 50, 100], [10, 25, 50, 100]];
+	}else {
+		var lengthMenu = [];
+	}
+
+    var table = $('#'+tableId).DataTable({
+    	language: {
+            url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+        },
+        responsive: true,
+        processing: false,
+        serverSide: false,
+        searching: true,
+        paging: true,
+        columns: tableColumns,
+        //order: [[ 0, "desc" ]],
+        order: [],
+        lengthMenu: lengthMenu,
+        info : true,
+        //dom: 'lBrtip',
+        //dom: "<'row'<'col-sm-6 col-md-6'l><'col-sm-6 col-md-6 text-right'B>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-7'p>>",
+        dom: dom,
+        buttons: {
+        	dom: {
+                button: {
+                    className: 'btn'
+                }
+            },
+	        buttons: [
+		        {
+		        	extend: 'excelHtml5',
+		        	text: '<i class="icon-export far fa-fw fa-file-excel"></i> Excel',
+		        	title: titleFile,
+		        	filename: fileName,
+		        	className: 'btn-success btn-export',
+				    action: function (e, dt, node, config) {
+				    	fnAction('buttons-excel', this, e, dt, node, config);
+				    },
+				    exportOptions: {
+                    	columns: exportColumns
+                	},
+		        },
+		        {
+		        	extend: 'pdfHtml5',
+		        	text: '<i class="icon-export far fa-fw fa-file-pdf"></i> PDF&nbsp;&nbsp;&nbsp;',
+		        	title: titleFile,
+		        	filename: fileName,
+		        	className: 'btn-danger btn-export',
+		        	messageTop: messageTop,
+		        	download: openDownload ? 'open' : 'download',
+		        	orientation: orientationPdf,
+		        	pageSize: pageSize,
+		        	action: function (e, dt, node, config) {
+				    	fnAction('buttons-pdf', this, e, dt, node, config);
+				    },
+				    exportOptions: {
+                    	columns: exportColumns
+                	},
+				    customize: function (doc, customize) {
+			          if(appendInTitle) {
+			            doc.content[0].text += appendInTitle;
+			          }
+			          
+			          //console.log(doc)
+			          //console.log(customize)
+			          //doc.content[position].table.widths = '40%';
+
+			          var position = 0;
+			          var posMsg = 0;
+			          for(var i=0; i<doc.content.length; i++) {
+			            if('table' in doc.content[i]) {
+			              position = i;
+			            }
+			            if(doc.content[i].style == 'message') {
+			              posMsg = i;
+			            }
+			          }
+
+			          if(sameColumnsWidth) {
+			            /*doc.content[position].table.widths = 
+			            Array(doc.content[position].table.body[0].length + 1).join('*').split('');*/
+
+			            var tbl = $('#'+tableId);
+			            var colCount = new Array();
+			            $(tbl).find('thead tr:first-child th[data-export!="false"]').each(function(){
+			                if($(this).attr('colspan')){
+			                    for(var i=1;i<=$(this).attr('colspan');i++){
+			                        colCount.push('*');
+			                    }
+			                }else{ colCount.push('*'); }
+			            });           
+
+			            var w = 100 / colCount.length;
+			            w = w.toFixed(2);
+			            
+			            for(var i=0;i<colCount.length;i++){
+			              colCount[i] = w+'%';
+			            }
+			            //console.log(colCount);
+
+			            doc.content[position].table.widths = colCount;
+			          }         
+
+			          var now = new Date();
+			          var jsDate = now.getDate()+'-'+((now.getMonth() + 1 < 10 ? '0' : '')+(now.getMonth() + 1))+'-'+now.getFullYear();
+
+			          if(header) {
+				          doc['header']=(function() {
+				            return {
+				              columns: [
+				                {
+				                  alignment: 'left',
+				                  text: [{ text: jsDate.toString() }]
+				                }
+				              ],
+				              margin: 20
+				            }
+				          });
+				      }
+
+			          if(footer) {
+				          doc['footer']=(function(page, pages) {
+				            return {
+				              columns: [
+				                {
+				                  alignment: 'right',
+				                  text: ['Página ', { text: page.toString() },  ' de ', { text: pages.toString() }]
+				                }
+				              ],
+				              margin: 20
+				            }
+				          });
+				      }
+
+			          var rowCount = doc.content[position].table.body.length;
+			          var columns = doc.content[position].table.body[0].length;
+
+			          doc.styles.title.color = '#0B62A4';
+
+			          doc.content[0].text = doc.content[0].text.replace(/<br\s*\/?>/ig, "\n");
+
+			          doc.content[posMsg].alignment = 'center';
+			          doc.content[posMsg].fontSize = 14;
+			          doc.content[posMsg].text = doc.content[posMsg].text.toString().replace(/<br\s*\/?>/ig, "\n");
+
+			          for (i = 0; i < rowCount; i++) {
+			            for (j = 0; j < columns; j++) {
+			              doc.content[position].table.body[i][j].alignment = 'center';
+			              doc.content[position].table.body[i][j].fillColor = 'white';
+			              doc.content[position].table.body[i][j].text = doc.content[position].table.body[i][j].text.replace(/<br\s*\/?>/ig, "\n");
+			              if(i == 0) {
+			                doc.content[position].table.body[i][j].color = '#0B62A4';
+			                doc.content[position].table.body[i][j].padding = '20px';
+			                doc.content[position].table.body[i][j].text = doc.content[position].table.body[i][j].text.replace(/<br\s*\/?>/ig, "\n");    
+			              }             
+			            };
+			          };
+
+			          var objLayout = {};
+			          objLayout['hLineWidth'] = function(i) { return 1; };
+			          objLayout['vLineWidth'] = function(i) { return 1; };
+			          objLayout['hLineColor'] = function(i) { return '#ECECEC'; };
+			          objLayout['vLineColor'] = function(i) { return '#ECECEC'; };
+			          objLayout['paddingLeft'] = function(i) { return 5; };
+			          objLayout['paddingRight'] = function(i) { return 5; };
+			          objLayout['paddingTop'] = function(i) { return 5; };
+			          objLayout['paddingBottom'] = function(i) { return 5; };
+			          doc.content[position].layout = objLayout;
+
+			        }
+		        },
+	            //'copyHtml5',
+	            //'csvHtml5',
+	        ]
+    	}
+    });
+
+	$('.searchBtn').on('click', function() {
+    	$(this).attr("disabled", "disabled");
+    	table.search($('.filters .search').val()).draw();
+    	$(this).removeAttr("disabled");
+    	$('.search').focus();
+    })
+
+    $('.search').on('keypress', function (e) {
+     	if(e.which === 13){
+            $(this).attr("disabled", "disabled");
+            table.search($('.filters .search').val()).draw();
+            $(this).removeAttr("disabled");
+            $(this).focus();
+        }
+    })
+
+    return table;
+}
+
+function dataTableServerSide(tableId, tableColumns, fileName, titleFile, orientationPdf, pageSize, openDownload, sameColumnsWidth, header, footer, showLength, showButtons, showInfo, messageTop='', appendInTitle='', method='GET', dataForm='') {
 	if(!tableId) {
 		tableId = 'my-table';
 	}
@@ -47,6 +328,39 @@ function dataTableServerSide(tableId, tableColumns, fileName, titleFile, orienta
 	$.fn.dataTable.ext.errMode = 'throw';
 	//$.fn.dataTable.ext.errMode = 'none';
 
+	var dom = "<'row'";
+	
+	if(showLength && showButtons) {
+		dom += "<'col-12 order-1 mt-2 order-sm-0 mt-sm-0 col-sm-7 col-md-7'l>";
+		dom += "<'col-8 offset-2 order-0 order-sm-1 col-sm-5 offset-sm-0 col-md-5 text-right'B>";
+	}
+	else if(showLength && !showButtons) {
+		dom += "<'col-12 order-1 mt-2 order-sm-0 mt-sm-0 col-sm-7 col-md-7'l>";
+	}
+	else if(!showLength && showButtons) {
+		dom += "<'col-8 offset-2 offset-md-0 col-md-12 text-right'B>";
+	}
+	
+	dom += ">";
+
+	if(!showLength && !showButtons) {
+		dom = "";
+	}
+
+	dom += "<'row'<'col-sm-12'tr>>";
+
+	if(showInfo) {
+		dom += "<'row mt-2 mb-2'<'col-12 mb-3 col-md-12 col-lg-5 mb-lg-0'i><'col-12 col-md-12 col-lg-7 text-right'p>>";
+	}else {
+		dom += "<'row mt-2 mb-2'<'col-12 col-md-12 col-lg-12 text-right'p>>";
+	}
+
+	if(showLength) {
+		var lengthMenu = [[10, 25, 50, 100], [10, 25, 50, 100]];
+	}else {
+		var lengthMenu = [];
+	}
+
     var table = $('#'+tableId).DataTable({
     	language: {
             url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
@@ -89,11 +403,11 @@ function dataTableServerSide(tableId, tableColumns, fileName, titleFile, orienta
 	    },
         //order: [[ 0, "desc" ]],
         order: [],
-        lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+        lengthMenu: lengthMenu,
         info : true,
         //dom: 'lBrtip',
         //dom: "<'row'<'col-sm-6 col-md-6'l><'col-sm-6 col-md-6 text-right'B>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-7'p>>",
-        dom: "<'row'<'col-12 order-1 mt-2 order-sm-0 mt-sm-0 col-sm-7 col-md-7'l><'col-8 offset-2 order-0 order-sm-1 col-sm-5 offset-sm-0 col-md-5 text-right'B>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 text-center'i>><'row'<'col-sm-12'p>>",
+        dom: dom,
         buttons: {
         	dom: {
                 button: {
@@ -150,7 +464,7 @@ function dataTableServerSide(tableId, tableColumns, fileName, titleFile, orienta
 
 			            var tbl = $('#'+tableId);
 			            var colCount = new Array();
-			            $(tbl).find('thead tr:first-child th.col-export').each(function(){
+			            $(tbl).find('thead tr:first-child th[data-export!="false"]').each(function(){
 			                if($(this).attr('colspan')){
 			                    for(var i=1;i<=$(this).attr('colspan');i++){
 			                        colCount.push('*');

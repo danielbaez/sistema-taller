@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfilesController;
+use App\Http\Controllers\UserAccountsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,12 +16,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
+});*/
+
+Auth::routes(['register' => true, 'reset' => false, 'confirm' => false, 'verify' => false]);
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::middleware(['auth', 'user.menu'])->group(function () {
+    Route::get('/profilesList', [UserAccountsController::class, 'profilesList'])->name('profilesList');
+    Route::get('/enterProfile/{user_account_id}', [UserAccountsController::class, 'enterProfile'])->name('enterProfile');
+
+    Route::middleware(['user.account'])->group(function () {
+        Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+
+        Route::resource('/profiles', ProfilesController::class);
+    });
 });
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/users', [App\Http\Controllers\HomeController::class, 'users'])->name('users.index');

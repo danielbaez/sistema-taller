@@ -31,9 +31,9 @@
             <table class="table table-bordered table-striped table-hover bg-white" id="my-table" data-url="{{ route('users.index') }}">
                 <thead>
                     <tr class="text-center">
-                        <th scope="col" data-data="id">#</th>
+                        <th scope="col" data-data="id" data-export="true">#</th>
                         <th scope="col" data-data="name" data-export="{'data': 'name'}">Nombre</th>
-                        <th scope="col" data-data="email">Email</th>
+                        <th scope="col" data-data="email" data-export="true">Email</th>
                         <th scope="col" data-data="action" data-export="false" data-orderable="false" data-searchable="false">Acción</th>
                     </tr>
                 </thead>
@@ -74,7 +74,7 @@
             ];*/
 
             //overwriteExport();
-            dataTableServerSide(null, null, 'perfiles', 'PERFILES', 'portrait', 'A4', false, true, true, true);
+            dataTableServerSide(null, null, 'perfiles', 'PERFILES', 'portrait', 'A4', false, true, true, true, true, true, true);
         });
     </script>
 @stop
