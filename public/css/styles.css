@@ -52,8 +52,9 @@ div.dataTables_info {
 .dt-buttons > * {
 	flex: 1 !important;
 }*/
-.icon-export {
-	font-size: 1.3em;
+.icon-export, .icon-c {
+	font-size: 1.22em;
+	vertical-align: text-bottom;
 }
 table.dataTable {
 	width: 100% !important;
@@ -123,4 +124,9 @@ div.dataTables_wrapper>div:first-child.row>div[class^="col-"]:last-child {
     li.paginate_button {
         /*display: none;*/
     }
+}
+
+
+.navbar-nav>.user-menu>.dropdown-menu>.user-body {
+	padding: 10px !important;
 }

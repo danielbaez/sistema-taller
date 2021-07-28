@@ -1,3 +1,9 @@
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
 function dataTableClientSide(tableId, tableColumns, fileName, titleFile, orientationPdf, pageSize, openDownload, sameColumnsWidth, header, footer, showLength, showButtons, showInfo, messageTop='', appendInTitle='', method='GET', dataForm='') {
 	if(!tableId) {
 		tableId = 'my-table';
@@ -90,7 +96,7 @@ function dataTableClientSide(tableId, tableColumns, fileName, titleFile, orienta
 
     var table = $('#'+tableId).DataTable({
     	language: {
-            url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+            url: '/datatable_spanish.json'
         },
         responsive: true,
         processing: false,
@@ -363,7 +369,7 @@ function dataTableServerSide(tableId, tableColumns, fileName, titleFile, orienta
 
     var table = $('#'+tableId).DataTable({
     	language: {
-            url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json'
+            url: '/datatable_spanish.json'
         },
         responsive: true,
         processing: true,
@@ -748,3 +754,41 @@ function fnAction(btn, this2, e, dt, node, config) {
 		
 	}, 500);
 }
+
+$.fn.dataTable.Api.register( 'order.neutral()', function () {
+    return this.iterator( 'table', function ( s ) {
+        s.aaSorting.length = 0;
+        s.aiDisplay.sort( function (a,b) {
+            return a-b;
+        } );
+        s.aiDisplayMaster.sort( function (a,b) {
+            return a-b;
+        } );
+    } );
+} );
+
+$(document).on('click', '.btn-submit-create', function(e){
+    e.preventDefault();
+    var url = $(this).parents('form').attr('action');
+    var data = $(this).parents('form').serialize();
+    var modal = ($(this).parents('.modal'));
+
+    $.ajax({
+       type: 'POST',
+       url: url,
+       data: data,
+       success: function(data){
+          if(data.success) {
+          	modal.modal('hide');
+          	var table = $.fn.dataTable.tables(true);
+          	//$(table).DataTable().ajax.reload();
+          	//var order = $(table).DataTable().order();
+          	//console.log($(table).DataTable().order.neutral())
+          	$(table).DataTable().order([]).ajax.reload();
+          }
+       },
+       error: function(data){
+          console.log(data.responseJSON.message);
+       }
+    });
+});

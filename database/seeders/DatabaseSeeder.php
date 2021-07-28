@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
         	$this->add_user_accounts(3, $user);
         });
 
-        User::factory(200)
+        User::factory(50)
         ->create()
         ->each(function($user) {
         	$this->add_user_accounts(3, $user);

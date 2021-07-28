@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Branch;
+use App\Models\Profile;
+use App\Models\User_account;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -48,11 +51,16 @@ class User extends Authenticatable
 
     public function adminlte_desc()
     {
-        return 'That\'s a nice guy';
+        return Profile::find(session('profile_id'))->name ?? '';
     }
 
     public function adminlte_profile_url()
     {
-        return 'profile/username';
+        return '';
+    }
+
+    public function user_accounts()
+    {
+        return $this->hasMany(User_account::class);
     }
 }
