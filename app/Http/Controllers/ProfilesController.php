@@ -34,8 +34,18 @@ class ProfilesController extends Controller
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-        }      
-        return view('profiles.index');
+        }
+
+        $title = 'Perfiles';
+
+        $columns = [
+            ['title' => '#', 'data' => 'id', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
+            ['title' => 'Perfil', 'data' => 'name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
+            ['title' => 'Estado', 'data' => 'status_name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
+            ['title' => 'Acción', 'data' => 'action', 'export' => 'false', 'orderable' => 'false', 'searchable' => 'false']
+        ];
+
+        return view('profiles.index', compact('title', 'columns'));
     }
 
     /**
