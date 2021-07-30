@@ -9,13 +9,16 @@ class LogsController extends Controller
 {
     public function store($description, $status, $e)
     {
-    	Log::create([
-            'user_id' => auth()->user()->id,
-            'profile_id' => session()->get('profile_id'),
-            'branch_id' => session()->get('branch_id'),
-            'description' => $description.($e != '' ? ' *-* '.$e : ''),
-            'status' => $status,
-            'created_at' => date('Y-m-d H:i:s')
-        ]);
+        if(auth()->check())
+        {
+            Log::create([
+                'user_id' => auth()->user()->id,
+                'profile_id' => session()->get('profile_id'),
+                'branch_id' => session()->get('branch_id'),
+                'description' => $description.($e != '' ? ' *-* '.$e : ''),
+                'status' => $status,
+                'created_at' => date('Y-m-d H:i:s')
+            ]);
+        }
     }
 }

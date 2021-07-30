@@ -1,4 +1,4 @@
-@if(session('message'))
+<!-- @if(session('message'))
 	<div class="row">
 		<div class="col-12">
 	    	<div class="alert alert-{{ session('message')[0] == 1 ? 'success' : 'danger' }} alert-dismissible fade show" role="alert">
@@ -9,4 +9,11 @@
 			</div>
 	    </div>
 	</div>
-@endif
+@endif -->
+
+<div class="row d-none" id="alert-message">
+	<div class="col-12">
+    	<div class="alert" role="alert">
+		</div>
+    </div>
+</div>

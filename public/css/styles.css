@@ -3,8 +3,8 @@
 		/*padding: 0;*/
 	}
 	.content-header {
-		padding-left: 0;
-		padding-right: 0;
+		padding-left: 0 !important;
+		padding-right: 0 !important;
 	}
 	.content {
 		padding-left: 0 !important;

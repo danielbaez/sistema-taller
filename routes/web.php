@@ -38,3 +38,7 @@ Route::middleware(['auth', 'user.menu'])->group(function () {
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/users', [App\Http\Controllers\HomeController::class, 'users'])->name('users.index');
+
+Route::get('/refreshToken', function() {
+    return csrf_token();
+})->name('refreshToken');

@@ -1,0 +1,1 @@
+<button type="submit" class="btn btn-submit-create btn-primary m-auto pl-5 pr-5">Crear</button>

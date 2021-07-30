@@ -22,6 +22,7 @@
 @section('content')
     @include('profiles.create')
     @include('profiles.edit')
+    @include('partials.form.activate_or_desactivate')
     <div class="row">
         <div class="col-12 col-sm-10 offset-sm-1 mb-4 filters">
             <div class="row">

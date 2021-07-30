@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Profile;
+use App\Http\Requests\ProfileRequest;
 use DataTables;
 use Illuminate\Support\Facades\DB;
 
@@ -27,7 +28,7 @@ class ProfilesController extends Controller
                     }
                 }, true)
                 ->addColumn('action', function($row){
-                    $resource = 'users';
+                    $resource = 'profiles';
                     $btn = view('partials.options', compact('row', 'resource'))->render();
                     return $btn;
                 })
@@ -53,7 +54,7 @@ class ProfilesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProfileRequest $request)
     {
         DB::beginTransaction();
 
@@ -97,7 +98,7 @@ class ProfilesController extends Controller
      */
     public function show($id)
     {
-        //
+        return Profile::findOrFail($id);
     }
 
     /**
@@ -118,9 +119,39 @@ class ProfilesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProfileRequest $request, Profile $profile)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $profile->name = $request->get('name');
+            $profile->save();
+
+            logs_store("Se ha actualizado el perfil $profile->name - id: $profile->id", 1);
+
+            DB::commit();
+
+            $success = true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            
+            logs_store("Error al actualizar el perfil - id: $profile->id", 0, $e);
+
+            $success = false;
+        }
+
+        if($success)
+        {
+            $message = '¡Se ha actualizado el perfil correctamente!';
+        }
+        else
+        {
+            $message = '¡Error al actualizar el perfil!';
+        }
+
+        //$request->session()->flash('message', [$success, $message]);
+
+        return response()->json(['success' => $success, 'message' => $message]);
     }
 
     /**
@@ -129,8 +160,44 @@ class ProfilesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Profile $profile)
     {
-        //
+        $status = !empty($request->get('status')) ? $request->get('status') : 0;
+        
+        $status_success = $status == 1 ? 'activado' : 'desactivado';
+
+        $status_error = $status == 1 ? 'activar' : 'desactivar';
+
+        DB::beginTransaction();
+
+        try {
+            $profile->status = !empty($request->get('status')) ? $request->get('status') : 0;
+            $profile->save();
+
+            logs_store("Se ha $status_success el perfil $profile->name - id: $profile->id", 1);
+
+            DB::commit();
+
+            $success = true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            
+            logs_store("Error al $status_error el perfil - id: $profile->id", 0, $e);
+
+            $success = false;
+        }
+
+        if($success)
+        {
+            $message = "¡Se ha $status_success el perfil correctamente!";
+        }
+        else
+        {
+            $message = '¡Error al $status_error el perfil!';
+        }
+
+        //$request->session()->flash('message', [$success, $message]);
+
+        return response()->json(['success' => $success, 'message' => $message]);
     }
 }
