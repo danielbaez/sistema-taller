@@ -17,7 +17,6 @@ class ProfilesController extends Controller
      */
     public function index(Request $request)
     {
-        dd($request->route());
         if($request->ajax())
         {
             $resource = $request->route()->uri();
