@@ -10,8 +10,8 @@
 {{--@include('partials.change_profile')--}}
 
 @section('content')
-    @include('profiles.create')
-    @include('profiles.edit')
+    @include('profiles.create', ['form' => 'create'])
+    @include('profiles.create', ['form' => 'edit'])
     @include('partials.form.activate_or_desactivate')
     @include('partials.search')
     @include('partials.table', ['url' => route('profiles.index'), 'columns' => $columns])

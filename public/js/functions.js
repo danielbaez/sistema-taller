@@ -845,6 +845,10 @@ $(document).on('click', '#edit', function(e) {
 
       				var tag_name = $(this).prop("tagName").toLowerCase();
 
+      				var id = $('#modalCreate').find(tag_name+'[name="'+name+'"]').attr('id');
+  					$('#modalCreate').find(tag_name+'[name="'+name+'"]').attr('id', '_');
+  					$('#modalCreate').find(tag_name+'[name="'+name+'"]').attr('data-id', id);
+
       				if(tag_name == 'input') {
       					switch(type) {
 							case 'text':
@@ -886,6 +890,13 @@ $(document).on('click', '#activeOrDesactivate', function(e) {
 $(".modal-form").on("hidden.bs.modal", function () {
     removeValidationErrorMessage();
     $(this).find('form').trigger('reset');
+
+    if($(this).attr('id') == 'modalEdit') {
+    	$('#modalCreate').find('[id="_"]').each(function() {
+    		$(this).attr('id', $(this).attr('data-id'));
+    		$(this).removeAttr('data-id');
+    	});
+    }
 });
 
 function showAlert(status, message, animateTop = true) {
