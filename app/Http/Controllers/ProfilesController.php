@@ -17,18 +17,19 @@ class ProfilesController extends Controller
      */
     public function index(Request $request)
     {
+        dd($request->route());
         if($request->ajax())
         {
+            $resource = $request->route()->uri();
             $data = Profile::orderBy('id', 'desc')->get();
             return Datatables::of($data)
-                ->addIndexColumn()
+                //->addIndexColumn()
                 ->filter(function ($query) use ($request) {
                     if($request->get('aaa')) {
                         $query->where('id', 'like', "%" . $request->get('aaa') . "%");
                     }
                 }, true)
-                ->addColumn('action', function($row){
-                    $resource = 'profiles';
+                ->addColumn('action', function($row) use ($resource) {
                     $btn = view('partials.options', compact('row', 'resource'))->render();
                     return $btn;
                 })
