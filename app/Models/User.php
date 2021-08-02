@@ -9,10 +9,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -23,7 +24,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'status'
     ];
+
+    protected $appends = ['status_name'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -62,5 +66,10 @@ class User extends Authenticatable
     public function user_accounts()
     {
         return $this->hasMany(User_account::class);
+    }
+
+    public function getStatusNameAttribute()
+    {
+        return config('system.status.'.$this->status);
     }
 }

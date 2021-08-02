@@ -4,6 +4,7 @@ use App\Models\Profile;
 use App\Models\User_account;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\LogsController;
+use Illuminate\Support\Facades\Route;
 
 if(!function_exists('current_user'))
 {
@@ -43,5 +44,51 @@ if(!function_exists('logs_store'))
     function logs_store($description, $status, $e = '')
     {
         (new LogsController)->store($description, $status, $e);
+    }
+}
+
+if(!function_exists('user_permissions'))
+{
+    function user_permissions($instance, $permissions = [], $default_permissions = true, $resource = '')
+    {
+        if(!$resource)
+        {
+            $resource = explode(".", Route::currentRouteName())[0];
+        }
+
+        if($default_permissions)
+        {
+            $instance->middleware(function ($request, $next) use ($resource) {
+                $action_method = $request->route()->getActionMethod();
+
+                if($action_method == 'index' && !(auth()->user()->hasAnyPermission([$resource.'.index', $resource.'.create'])))
+                {
+                    //abort(403, 'This action is unauthorized.');
+                    throw new \Illuminate\Auth\Access\AuthorizationException();
+                }
+
+                return $next($request);
+            });
+
+            $instance->middleware('can:'.$resource.'.create')->only(['create', 'store']);
+            $instance->middleware('can:'.$resource.'.edit')->only(['edit', 'update']);
+            $instance->middleware('can:'.$resource.'.destroy')->only('destroy');
+            $instance->middleware('can:'.$resource.'.activate')->only('destroy');
+        }
+
+        if(count($permissions))
+        {
+            foreach ($permissions as $can => $method)
+            {
+                if(is_numeric($can))
+                {
+                    $instance->middleware('can:'.$method)->only($method);    
+                }
+                else
+                {
+                    $instance->middleware('can:'.$can)->only($method);
+                }
+            }
+        }
     }
 }

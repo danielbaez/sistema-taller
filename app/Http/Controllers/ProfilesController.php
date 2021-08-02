@@ -10,16 +10,17 @@ use Illuminate\Support\Facades\DB;
 
 class ProfilesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        user_permissions($this);
+    }
+    
     public function index(Request $request)
     {
+        $resource = explode(".", $request->route()->getName())[0];
+
         if($request->ajax())
         {
-            $resource = $request->route()->uri();
             $data = Profile::orderBy('id', 'desc')->get();
             return Datatables::of($data)
                 //->addIndexColumn()
@@ -37,15 +38,20 @@ class ProfilesController extends Controller
         }
 
         $title = 'Perfiles';
+        $title_form = 'Perfil';
 
         $columns = [
             ['title' => '#', 'data' => 'id', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
             ['title' => 'Perfil', 'data' => 'name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
-            ['title' => 'Estado', 'data' => 'status_name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
-            ['title' => 'Acción', 'data' => 'action', 'export' => 'false', 'orderable' => 'false', 'searchable' => 'false']
+            ['title' => 'Estado', 'data' => 'status_name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true']
         ];
 
-        return view('profiles.index', compact('title', 'columns'));
+        if(auth()->user()->can($resource.'.edit') || auth()->user()->can($resource.'.destroy') || auth()->user()->can($resource.'.activate'))
+        {
+            $columns[] = ['title' => 'Acción', 'data' => 'action', 'export' => 'false', 'orderable' => 'false', 'searchable' => 'false'];
+        }
+
+        return view($resource.'.index', compact('title', 'title_form', 'columns', 'resource'));
     }
 
     /**
@@ -203,7 +209,7 @@ class ProfilesController extends Controller
         }
         else
         {
-            $message = '¡Error al $status_error el perfil!';
+            $message = "¡Error al $status_error el perfil!";
         }
 
         //$request->session()->flash('message', [$success, $message]);

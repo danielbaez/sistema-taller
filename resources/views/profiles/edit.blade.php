@@ -1,4 +1,4 @@
-@extends('partials.form.edit', ['resource' => 'Perfil'])
+@extends('partials.form.edit', ['title' => 'Perfil'])
 
 @section('form_content')
   <div class="form-group">

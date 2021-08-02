@@ -35,8 +35,11 @@ class DatabaseSeeder extends Seeder
 
         Branch::factory(3)->create();
 
+        $this->call(RoleSeeder::class);
+
         User::factory()
-        ->create(['username' => 'daniel', 'name' => 'Daniel Baez', 'email' => 'daniel@gmail.com'])
+        ->create(['username' => 'daniel', 'name' => 'Daniel Baez', 'email' => 'daniel@gmail.com', 'status' => 1])
+        ->assignRole('Administrador')
         ->each(function($user) {
         	$this->add_user_accounts(3, $user);
         });

@@ -8,17 +8,11 @@ use DataTables;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+    public function __construct()
+    {
+        user_permissions($this, ['dashboard'], false);
+    }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
         return redirect()->route('login');        

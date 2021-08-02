@@ -3,12 +3,12 @@
 if($form == 'create')
 {
   $view = 'partials.form.create';
-  $params = ['resource' => 'Perfil', 'action' => route('profiles.store')];
+  $params = ['title' => $title, 'action' => route($resource.'.store')];
 }
 if($form == 'edit')
 {
   $view = 'partials.form.edit';
-  $params = ['resource' => 'Perfil'];
+  $params = ['title' => $title];
 }
 
 @endphp

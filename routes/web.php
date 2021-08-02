@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsersController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\UserAccountsController;
@@ -30,14 +31,14 @@ Route::middleware(['auth', 'user.menu'])->group(function () {
 
     Route::middleware(['user.account'])->group(function () {
         Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
-
-        Route::resource('/profiles', ProfilesController::class);
+        Route::resource('/usuarios', UsersController::class, ['names' => 'users'])->parameters(['usuarios' => 'user']);
+        Route::resource('/perfiles', ProfilesController::class, ['names' => 'profiles'])->parameters(['perfiles' => 'profile']);
     });
 });
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/users', [App\Http\Controllers\HomeController::class, 'users'])->name('users.index');
+//Route::get('/users', [App\Http\Controllers\HomeController::class, 'users'])->name('users.index');
 
 Route::get('/refreshToken', function() {
     return csrf_token();

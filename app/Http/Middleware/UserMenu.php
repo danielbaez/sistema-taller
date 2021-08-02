@@ -39,12 +39,21 @@ class UserMenu
                     'url'         => route('dashboard'),
                     'icon'        => 'far fa-fw fa-file',
                     'label_color' => 'success',
+                    'can'         => 'dashboard'
+                ],
+                [
+                    'text'        => 'Usuarios',
+                    'url'         => route('users.index'),
+                    'icon'        => 'far fa-fw fa-user',
+                    'label_color' => 'success',
+                    'can'         => ['users.index', 'users.create']
                 ],
                 [
                     'text'        => 'Perfiles',
                     'url'         => route('profiles.index'),
                     'icon'        => 'far fa-fw fa-user',
-                    'label_color' => 'success'
+                    'label_color' => 'success',
+                    'can'         => ['profiles.index', 'profiles.create']
                 ],
                 [
                     'text'        => 'Sucursales',
