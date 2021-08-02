@@ -5,6 +5,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\UserAccountsController;
+use App\Http\Controllers\RolesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,7 @@ Route::middleware(['auth', 'user.menu'])->group(function () {
         Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
         Route::resource('/usuarios', UsersController::class, ['names' => 'users'])->parameters(['usuarios' => 'user']);
         Route::resource('/perfiles', ProfilesController::class, ['names' => 'profiles'])->parameters(['perfiles' => 'profile']);
+        Route::resource('/roles', RolesController::class, ['names' => 'roles'])->parameters(['roles' => 'role']);
     });
 });
 

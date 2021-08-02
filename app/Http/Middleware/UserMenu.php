@@ -56,6 +56,13 @@ class UserMenu
                     'can'         => ['profiles.index', 'profiles.create']
                 ],
                 [
+                    'text'        => 'Roles',
+                    'url'         => route('roles.index'),
+                    'icon'        => 'far fa-fw fa-user',
+                    'label_color' => 'success',
+                    'can'         => ['roles.index', 'roles.create']
+                ],
+                [
                     'text'        => 'Sucursales',
                     'url'         => 'products',
                     'icon'        => 'far fa-fw fa-building',

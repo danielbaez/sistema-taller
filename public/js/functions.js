@@ -842,6 +842,12 @@ $(document).on('click', '#edit', function(e) {
       			$('#modalEdit').find('form').find(":input").each(function(v) {
       				var type = $(this).attr('type');
       				var name = $(this).attr('name');
+      				var isArray = false;
+      				
+      				if(name && name.indexOf('[]') >= 0) {
+      					isArray = true;
+      					name = name.slice(0,-2);
+      				}
 
       				var tag_name = $(this).prop("tagName").toLowerCase();
 
@@ -859,6 +865,18 @@ $(document).on('click', '#edit', function(e) {
 									$(this).attr('checked', true);
 								}else {
 									$(this).attr('checked', false);
+								}
+							case 'checkbox':
+								if(isArray) {
+									for(var j = 0; j < data[name].length; j++) {
+										if($(this).val() == data[name][j].id) {
+											$(this).attr('checked', true);
+										}
+									}
+								}else {
+									if($(this).val() == data[name]) {
+										$(this).attr('checked', true);
+									}
 								}
 							break;
 						}
@@ -890,6 +908,7 @@ $(document).on('click', '#activeOrDesactivate', function(e) {
 $(".modal-form").on("hidden.bs.modal", function () {
     removeValidationErrorMessage();
     $(this).find('form').trigger('reset');
+    $(this).find('form').find('input:checkbox').removeAttr('checked');
 
     if($(this).attr('id') == 'modalEdit') {
     	$('#modalCreate').find('[id="_"]').each(function() {
