@@ -17,7 +17,7 @@ class UserMenu
      */
     public function handle(Request $request, Closure $next)
     {
-        if($request->route()->getName() == 'profilesList')
+        if($request->route()->getName() == 'rolesList')
         {
             if(Session::has('profile_id'))
             {

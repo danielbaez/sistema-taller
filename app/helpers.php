@@ -31,11 +31,13 @@ if(!function_exists('current_user_accounts'))
 {
     function current_user_accounts()
     {
-    	return User_account::whereHas('profile', function($q) {
+    	/*return User_account::whereHas('profile', function($q) {
             $q->where('profiles.status', 1);
         })->where('user_id', Auth::user()->id)
         ->active()
-    	->get();
+    	->get();*/
+
+        return auth()->user()->roles;
     }
 }
 
@@ -58,7 +60,7 @@ if(!function_exists('user_permissions'))
 
         if($default_permissions)
         {
-            $instance->middleware(function ($request, $next) use ($resource) {
+            /*$instance->middleware(function ($request, $next) use ($resource) {
                 $action_method = $request->route()->getActionMethod();
 
                 if($action_method == 'index' && !(auth()->user()->hasAnyPermission([$resource.'.index', $resource.'.create'])))
@@ -68,12 +70,18 @@ if(!function_exists('user_permissions'))
                 }
 
                 return $next($request);
-            });
+            });*/
 
-            $instance->middleware('can:'.$resource.'.create')->only(['create', 'store']);
-            $instance->middleware('can:'.$resource.'.edit')->only(['edit', 'update']);
-            $instance->middleware('can:'.$resource.'.destroy')->only('destroy');
-            $instance->middleware('can:'.$resource.'.activate')->only('destroy');
+            $instance->middleware('user.permission:'.$resource.'.index|'.$resource.'.create')->only(['index']);
+            $instance->middleware('user.permission:'.$resource.'.create')->only(['create', 'store']);
+            $instance->middleware('user.permission:'.$resource.'.edit')->only(['edit', 'update']);
+            $instance->middleware('user.permission:'.$resource.'.destroy')->only('destroy');
+            $instance->middleware('user.permission:'.$resource.'.activate')->only('destroy');
+
+            //$instance->middleware('can:'.$resource.'.create')->only(['create', 'store']);
+            //$instance->middleware('can:'.$resource.'.edit')->only(['edit', 'update']);
+            //$instance->middleware('can:'.$resource.'.destroy')->only('destroy');
+            //$instance->middleware('can:'.$resource.'.activate')->only('destroy');
         }
 
         if(count($permissions))
@@ -82,11 +90,13 @@ if(!function_exists('user_permissions'))
             {
                 if(is_numeric($can))
                 {
-                    $instance->middleware('can:'.$method)->only($method);    
+                    //$instance->middleware('can:'.$method)->only($method);
+                    $instance->middleware('user.permission:'.$method)->only($method);    
                 }
                 else
                 {
-                    $instance->middleware('can:'.$can)->only($method);
+                    //$instance->middleware('can:'.$can)->only($method);
+                    $instance->middleware('user.permission:'.$can)->only($method);
                 }
             }
         }

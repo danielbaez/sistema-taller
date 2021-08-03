@@ -7,6 +7,7 @@ use App\Models\Profile;
 use Illuminate\Http\Request;
 use App\Models\User_account;
 use Illuminate\Support\Facades\Session;
+use Spatie\Permission\Models\Role;
 
 class UserAccount
 {
@@ -17,13 +18,8 @@ class UserAccount
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    /*public function handle(Request $request, Closure $next)
     {
-        /*if(!Session::has('profile_id'))
-        {
-            return redirect()->route('profilesList');
-        }*/
-
         $pass = false;
 
         $profile_id = Session::has('profile_id') ? Session::get('profile_id') : false;
@@ -43,14 +39,38 @@ class UserAccount
             }
         }
 
-        /*if(!Session::has('profile_id') || auth()->user()->user_accounts()->where('profile_id', Session::get('profile_id'))->where('status', 1)->first() == null)
-        {
-            return redirect()->route('profilesList');
-        }*/
-
         if(!$pass)
         {
             return redirect()->route('profilesList');
+        }
+
+        return $next($request);
+    }*/
+
+    public function handle(Request $request, Closure $next)
+    {
+        $pass = false;
+
+        $profile_id = Session::has('profile_id') ? Session::get('profile_id') : false;
+
+        if($profile_id)
+        {
+            $profile = Role::where('id', $profile_id)->first();
+
+            if($profile)
+            {
+                $role = Role::find($profile_id);
+
+                if(auth()->user()->hasRole($role))
+                {
+                    $pass = true;                
+                }          
+            }
+        }
+
+        if(!$pass)
+        {
+            return redirect()->route('rolesList');
         }
 
         return $next($request);
