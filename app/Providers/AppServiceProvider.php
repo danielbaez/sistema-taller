@@ -23,11 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $location = request()->segment(1);
-        //dd($location);
-        \Gate::define('aaabbbccc', function ($user) {
-            dd($user);
-            return false;
-        });
+        //
     }
 }
