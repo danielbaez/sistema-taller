@@ -7,8 +7,6 @@
     @include('partials.header', ['title' => $title, 'resource' => $resource])
 @stop
 
-{{--@include('partials.change_profile')--}}
-
 @section('content')
     @rolpermission($resource.'.index')
         @include('partials.search')

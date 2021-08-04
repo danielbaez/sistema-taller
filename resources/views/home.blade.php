@@ -11,8 +11,6 @@
     </div>
 @stop
 
-{{--@include('partials.change_profile')--}}
-
 @section('content')
     <div class="row">
         <div class="col-12 col-sm-10 offset-sm-1 mb-4 filters">
