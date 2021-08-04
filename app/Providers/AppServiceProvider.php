@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
+use Spatie\Permission\Models\Role;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Blade::directive('dsdsd', function ($permission) {
+          return "<?php echo abc($permission); ?>";
+        });
+
+        Blade::if('rolpermission', function ($permission) {
+            return rol_permission($permission);
+        });
+
+        Blade::if('rolpermissionany', function ($permission) {
+            return rol_permission_any($permission);
+        });
     }
 }

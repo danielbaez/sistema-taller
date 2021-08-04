@@ -10,21 +10,21 @@
 {{--@include('partials.change_profile')--}}
 
 @section('content')
-    @can($resource.'.index')
+    @rolpermission($resource.'.index')
         @include('partials.search')
         @include('partials.table', ['url' => route($resource.'.index'), 'columns' => $columns])
-    @endcan
-    @can($resource.'.create')
+    @endrolpermission
+    @rolpermission($resource.'.create')
         @include($resource.'.create', ['form' => 'create', 'resource' => $resource, 'title' => $title_form])
-    @endcan
-    @can($resource.'.index')
-        @can($resource.'.edit')
+    @endrolpermission
+    @rolpermission($resource.'.index')
+        @rolpermission($resource.'.edit')
             @include($resource.'.create', ['form' => 'edit', 'title' => $title_form])
-        @endcan
-        @canany([$resource.'.activate', $resource.'.destroy'])
+        @endrolpermission
+        @rolpermissionany([$resource.'.activate', $resource.'.destroy'])
             @include('partials.form.activate_or_desactivate', ['title' => $title_form])
-        @endcanany
-    @endcan
+        @endrolpermissionany
+    @endrolpermission
 @stop
 
 @section('js')

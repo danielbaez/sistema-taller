@@ -73,7 +73,7 @@
 							<td>{{ $user_account->profile_id == 2 ? $user_account->branch->name : '---' }}</td>
 							<td>{{ $user_account->status_name }}</td>
 							<td>
-								@if($user_account->profile->status == 1 && $user_account->is_active)
+								@if($user_account->profile->status === 1 && $user_account->is_active)
 									<a href="{{ route('enterProfile', ['user_account_id' => $user_account->id]) }}" class="btn btn-primary">Ingresar</a>
 								@else
 									Perfil desactivado

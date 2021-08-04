@@ -5,6 +5,7 @@ use App\Models\User_account;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\LogsController;
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Models\Role;
 
 if(!function_exists('current_user'))
 {
@@ -100,5 +101,35 @@ if(!function_exists('user_permissions'))
                 }
             }
         }
+    }
+}
+
+if(!function_exists('rol_permission'))
+{
+    function rol_permission($permission)
+    {
+        $role = Role::find(session('profile_id'));
+        
+        if(!$role->hasAllDirectPermissions($permission))
+        {
+            return false;
+        }
+
+        return true;
+    }
+}
+
+if(!function_exists('rol_permission_any'))
+{
+    function rol_permission_any($permission)
+    {
+        $role = Role::find(session('profile_id'));
+        
+        if(!$role->hasAnyDirectPermission($permission))
+        {
+            return false;
+        }
+
+        return true;
     }
 }

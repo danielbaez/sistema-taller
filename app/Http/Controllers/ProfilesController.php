@@ -46,7 +46,7 @@ class ProfilesController extends Controller
             ['title' => 'Estado', 'data' => 'status_name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true']
         ];
 
-        if(auth()->user()->can($resource.'.edit') || auth()->user()->can($resource.'.destroy') || auth()->user()->can($resource.'.activate'))
+        if(rol_permission_any([$resource.'.edit', $resource.'.destroy', $resource.'.activate']))
         {
             $columns[] = ['title' => 'Acción', 'data' => 'action', 'export' => 'false', 'orderable' => 'false', 'searchable' => 'false'];
         }
