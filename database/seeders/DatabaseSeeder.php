@@ -33,9 +33,9 @@ class DatabaseSeeder extends Seeder
         	'status' => 1
         ]);
 
-        Branch::factory(3)->create();
-
         $this->call(RoleSeeder::class);
+
+        Branch::factory(3)->create();
 
         User::factory()
         ->create(['username' => 'daniel', 'name' => 'Daniel Baez', 'email' => 'daniel@gmail.com', 'status' => 1])
