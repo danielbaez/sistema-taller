@@ -69,14 +69,45 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->name,
-            'password' => $request->name,
-            'status' => 1
-        ]);
+        DB::beginTransaction();
 
-        $user->roles()->sync($request->roles);
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->name,
+                'password' => $request->name,
+                'status' => 1
+            ]);
+
+            $user->roles()->sync($request->roles);
+
+            logs_store("Se ha creado el usuario $user->name - id: $user->id", 1);
+
+            //throw new \Exception("Hubo un error en la transacción");
+
+            DB::commit();
+
+            $success = true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            
+            logs_store("Error al crear el usuario", 0, $e);
+
+            $success = false;
+        }
+
+        if($success)
+        {
+            $message = '¡Se ha registrado el usuario correctamente!';
+        }
+        else
+        {
+            $message = '¡Error al registrar el usuario!';
+        }
+
+        //$request->session()->flash('message', [$success, $message]);
+
+        return response()->json(['success' => $success, 'message' => $message]);
     }
 
     /**
@@ -87,7 +118,7 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        return User::findOrFail($id);
+        return User::with('roles')->where('id', $id)->first();
     }
 
     /**
@@ -108,9 +139,41 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $user->name = $request->get('name');
+            $user->save();
+
+            $user->roles()->sync($request->roles);
+
+            logs_store("Se ha actualizado el usuario $user->name - id: $user->id", 1);
+
+            DB::commit();
+
+            $success = true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            
+            logs_store("Error al actualizar el usuario - id: $user->id", 0, $e);
+
+            $success = false;
+        }
+
+        if($success)
+        {
+            $message = '¡Se ha actualizado el usuario correctamente!';
+        }
+        else
+        {
+            $message = '¡Error al actualizar el usuario!';
+        }
+
+        //$request->session()->flash('message', [$success, $message]);
+
+        return response()->json(['success' => $success, 'message' => $message]);
     }
 
     /**
@@ -119,8 +182,44 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, User $user)
     {
-        //
+        $status = !empty($request->get('status')) ? $request->get('status') : 0;
+        
+        $status_success = $status == 1 ? 'activado' : 'desactivado';
+
+        $status_error = $status == 1 ? 'activar' : 'desactivar';
+
+        DB::beginTransaction();
+
+        try {
+            $user->status = !empty($request->get('status')) ? $request->get('status') : 0;
+            $user->save();
+
+            logs_store("Se ha $status_success el usuario $user->name - id: $user->id", 1);
+
+            DB::commit();
+
+            $success = true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            
+            logs_store("Error al $status_error el usuario - id: $user->id", 0, $e);
+
+            $success = false;
+        }
+
+        if($success)
+        {
+            $message = "¡Se ha $status_success el usuario correctamente!";
+        }
+        else
+        {
+            $message = "¡Error al $status_error el usuario!";
+        }
+
+        //$request->session()->flash('message', [$success, $message]);
+
+        return response()->json(['success' => $success, 'message' => $message]);
     }
 }

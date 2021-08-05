@@ -38,7 +38,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
     });
 });*/
 
-Route::middleware(['auth', 'user.menu'])->group(function () {
+Route::middleware(['auth', 'checkStatus', 'user.menu'])->group(function () {
     Route::get('/rolesList', [UserAccountsController::class, 'rolesList'])->name('rolesList');
     Route::get('/enterRol/{user_account_id}', [UserAccountsController::class, 'enterRol'])->name('enterRol');
 

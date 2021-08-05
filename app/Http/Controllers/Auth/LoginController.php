@@ -44,6 +44,12 @@ class LoginController extends Controller
         return 'username';
     }*/
 
+    protected function credentials(Request $request)
+    {
+        //return $request->only($this->username(), 'password');
+        return ['email' => $request->{$this->username()}, 'password' => $request->password, 'status' => 1];
+    }
+
     protected function authenticated(Request $request, $user)
     {
         logs_store("Inicia sesión", 1);
