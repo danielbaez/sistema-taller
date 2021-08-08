@@ -16,13 +16,13 @@ class CreateUserAccountsTable extends Migration
         Schema::create('user_accounts', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('profile_id')->unsigned();
+            $table->bigInteger('role_id')->unsigned();
             $table->bigInteger('branch_id')->nullable()->unsigned();
             $table->tinyInteger('status');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('profile_id')->references('id')->on('profiles');
+            $table->foreign('role_id')->references('id')->on('roles');
             $table->foreign('branch_id')->nullable()->references('id')->on('branches');
         });
     }

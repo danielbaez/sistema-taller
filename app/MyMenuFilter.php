@@ -3,17 +3,17 @@
 namespace App;
 
 use JeroenNoten\LaravelAdminLte\Menu\Filters\FilterInterface;
-use Spatie\Permission\Models\Role;
+use App\Models\Role;
 
 class MyMenuFilter implements FilterInterface
 {
     public function transform($item)
     {
-        if(!empty($item['can']))
+        if(!empty($item['permission']))
         {
-            $role = Role::find(session('profile_id'));
+            $role = Role::find(session('role_id'));
         
-            if(!$role->hasAnyDirectPermission($item['can']))
+            if(!$role->hasAnyPermission($item['permission']))
             {
                 return false;
             }

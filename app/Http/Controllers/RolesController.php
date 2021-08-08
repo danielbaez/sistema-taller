@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DataTables;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use App\Models\Role;
+use App\Models\Permission;
 use Illuminate\Support\Facades\DB;
 
 class RolesController extends Controller
@@ -23,6 +23,12 @@ class RolesController extends Controller
         {
             $data = Role::orderBy('id', 'desc')->get();
             return Datatables::of($data)
+                //->addIndexColumn()
+                ->filter(function ($query) use ($request) {
+                    if($request->get('aaa')) {
+                        $query->where('id', 'like', "%" . $request->get('aaa') . "%");
+                    }
+                }, true)
                 ->addColumn('action', function($row) use ($resource) {
                     $btn = view('partials.options', compact('row', 'resource'))->render();
                     return $btn;
@@ -36,7 +42,8 @@ class RolesController extends Controller
 
         $columns = [
             ['title' => '#', 'data' => 'id', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
-            ['title' => 'Nombre', 'data' => 'name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true']
+            ['title' => 'Rol', 'data' => 'name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
+            ['title' => 'Estado', 'data' => 'status_name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true']
         ];
 
         if(rol_permission_any([$resource.'.edit', $resource.'.destroy', $resource.'.activate']))
@@ -177,8 +184,44 @@ class RolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Role $role)
     {
-        //
+        $status = !empty($request->get('status')) ? $request->get('status') : 0;
+        
+        $status_success = $status == 1 ? 'activado' : 'desactivado';
+
+        $status_error = $status == 1 ? 'activar' : 'desactivar';
+
+        DB::beginTransaction();
+
+        try {
+            $role->status = !empty($request->get('status')) ? $request->get('status') : 0;
+            $role->save();
+
+            logs_store("Se ha $status_success el rol $role->name - id: $role->id", 1);
+
+            DB::commit();
+
+            $success = true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            
+            logs_store("Error al $status_error el rol - id: $role->id", 0, $e);
+
+            $success = false;
+        }
+
+        if($success)
+        {
+            $message = "¡Se ha $status_success el rol correctamente!";
+        }
+        else
+        {
+            $message = "¡Error al $status_error el rol!";
+        }
+
+        //$request->session()->flash('message', [$success, $message]);
+
+        return response()->json(['success' => $success, 'message' => $message]);
     }
 }

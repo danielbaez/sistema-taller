@@ -16,14 +16,14 @@ class CreateLogsTable extends Migration
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('profile_id')->nullable()->unsigned();
+            $table->bigInteger('role_id')->nullable()->unsigned();
             $table->bigInteger('branch_id')->nullable()->unsigned();
             $table->text('description');
             $table->tinyInteger('status');
             $table->dateTime('created_at');
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('profile_id')->nullable()->references('id')->on('profiles');
+            $table->foreign('role_id')->nullable()->references('id')->on('roles');
             $table->foreign('branch_id')->nullable()->references('id')->on('branches');
         });
     }

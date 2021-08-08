@@ -3,18 +3,16 @@
 namespace App\Models;
 
 use App\Models\Branch;
-use App\Models\Profile;
+use App\Models\Role;
 use App\Models\User_account;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
-use Spatie\Permission\Models\Role;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -56,7 +54,7 @@ class User extends Authenticatable
 
     public function adminlte_desc()
     {
-        return Role::find(session('profile_id'))->name ?? '';
+        return Role::find(session('role_id'))->name ?? '';
     }
 
     public function adminlte_profile_url()

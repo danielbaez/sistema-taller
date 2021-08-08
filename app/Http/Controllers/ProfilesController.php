@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Profile;
-use App\Http\Requests\ProfileRequest;
+use App\Models\Role;
+use App\Http\Requests\RoleRequest;
 use DataTables;
 use Illuminate\Support\Facades\DB;
 
@@ -70,7 +70,7 @@ class ProfilesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProfileRequest $request)
+    public function store(RoleRequest $request)
     {
         DB::beginTransaction();
 
@@ -135,7 +135,7 @@ class ProfilesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProfileRequest $request, Profile $profile)
+    public function update(RoleRequest $request, Profile $profile)
     {
         DB::beginTransaction();
 

@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Log;
 use App\Models\User;
 use App\Models\Branch;
-use App\Models\Profile;
+use App\Models\Role;
 use App\Models\User_account;
 use Illuminate\Database\Seeder;
 
@@ -18,33 +18,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Profile::create([
-        	'name' => 'Administrador',
-        	'status' => 1
-        ]);
-
-        Profile::create([
-        	'name' => 'Vendedor',
-        	'status' => 1
-        ]);
-
-        Profile::create([
-        	'name' => 'Almacén',
-        	'status' => 1
-        ]);
-
         $this->call(RoleSeeder::class);
 
         Branch::factory(3)->create();
 
         User::factory()
         ->create(['username' => 'daniel', 'name' => 'Daniel Baez', 'email' => 'daniel@gmail.com', 'status' => 1])
-        ->assignRole('Administrador')
         ->each(function($user) {
         	$this->add_user_accounts(3, $user);
         });
 
-        User::factory(50)
+        User::factory(10)
         ->create()
         ->each(function($user) {
         	$this->add_user_accounts(3, $user);
@@ -52,7 +36,7 @@ class DatabaseSeeder extends Seeder
 
         /*Log::create([
             'user_id' => 1,
-            'profile_id' => 1,
+            'role_id' => 1,
             'branch_id' => 1,
             'description' => 'text',
             'status' => 1,
@@ -67,7 +51,7 @@ class DatabaseSeeder extends Seeder
     	foreach($user_account as $key => $value)
     	{
     		$count = User_account::where('user_id', $value->user_id)
-        	->where('profile_id', $value->profile_id)
+        	->where('role_id', $value->role_id)
         	->where('branch_id', $value->branch_id)
         	->count();
 

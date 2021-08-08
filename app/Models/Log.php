@@ -11,5 +11,5 @@ class Log extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['user_id', 'profile_id', 'branch_id', 'description', 'status', 'created_at'];
+    protected $fillable = ['user_id', 'role_id', 'branch_id', 'description', 'status', 'created_at'];
 }

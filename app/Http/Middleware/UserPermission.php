@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
+use App\Models\Role;
 
 class UserPermission
 {
@@ -17,12 +17,11 @@ class UserPermission
      */
     public function handle(Request $request, Closure $next, $permission)
     {
-        $role = Role::find(session('profile_id'));
+        $role = Role::find(session('role_id'));
 
         $p = explode('|', $permission);
-        
-        //if(!$role->hasPermissionTo($permission))
-        if(!$role->hasAnyDirectPermission($p))
+
+        if(!$role->hasAnyPermission($p))
         {
             throw new \Illuminate\Auth\Access\AuthorizationException();
         }

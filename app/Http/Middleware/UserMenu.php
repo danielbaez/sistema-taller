@@ -19,19 +19,19 @@ class UserMenu
     {
         if($request->route()->getName() == 'rolesList')
         {
-            if(Session::has('profile_id'))
+            if(Session::has('role_id'))
             {
                 logs_store("Sale del perfil", 1);
             }
 
             Session::forget('user_account_id');
-            Session::forget('profile_id');
+            Session::forget('role_id');
             Session::forget('branch_id');
         }
 
         $menu = [];
 
-        if(Session::has('profile_id'))
+        if(Session::has('role_id'))
         {
             $menu = [
                 [
@@ -39,28 +39,21 @@ class UserMenu
                     'url'         => route('dashboard'),
                     'icon'        => 'far fa-fw fa-file',
                     'label_color' => 'success',
-                    'can'         => 'dashboard'
+                    'permission'  => 'dashboard'
                 ],
                 [
                     'text'        => 'Usuarios',
                     'url'         => route('users.index'),
                     'icon'        => 'far fa-fw fa-user',
                     'label_color' => 'success',
-                    'can'         => ['users.index', 'users.create']
-                ],
-                [
-                    'text'        => 'Perfiles',
-                    'url'         => route('profiles.index'),
-                    'icon'        => 'far fa-fw fa-user',
-                    'label_color' => 'success',
-                    'can'         => ['profiles.index', 'profiles.create']
+                    'permission'  => ['users.index', 'users.create']
                 ],
                 [
                     'text'        => 'Roles',
                     'url'         => route('roles.index'),
                     'icon'        => 'far fa-fw fa-user',
                     'label_color' => 'success',
-                    'can'         => ['roles.index', 'roles.create']
+                    'permission'  => ['roles.index', 'roles.create']
                 ],
                 [
                     'text'        => 'Sucursales',

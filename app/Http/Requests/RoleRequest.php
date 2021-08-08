@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class ProfileRequest extends FormRequest
+class RoleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,10 +25,10 @@ class ProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            //'name' => 'required|unique:profiles|max:20',
+            //'name' => 'required|unique:roles|max:20',
             'name' => [
                 'required',
-                Rule::unique('profiles', 'name')->ignore($this->profile),
+                Rule::unique('roles', 'name')->ignore($this->role),
             ],
             //'status' => 'required|in:0,1'
         ];

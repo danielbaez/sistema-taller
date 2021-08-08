@@ -3,11 +3,10 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Models\Profile;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Models\User_account;
 use Illuminate\Support\Facades\Session;
-use Spatie\Permission\Models\Role;
 
 class UserAccount
 {
@@ -18,50 +17,21 @@ class UserAccount
      * @param  \Closure  $next
      * @return mixed
      */
-    /*public function handle(Request $request, Closure $next)
-    {
-        $pass = false;
-
-        $profile_id = Session::has('profile_id') ? Session::get('profile_id') : false;
-
-        if($profile_id)
-        {
-            $profile = Profile::where('id', $profile_id)->where('status', 1)->first();
-
-            if($profile)
-            {
-                $user_account = User_account::where('user_id', auth()->user()->id)->where('profile_id', $profile_id)->where('status', 1)->first();
-
-                if($user_account)
-                {
-                    $pass = true;                
-                }          
-            }
-        }
-
-        if(!$pass)
-        {
-            return redirect()->route('profilesList');
-        }
-
-        return $next($request);
-    }*/
-
     public function handle(Request $request, Closure $next)
     {
         $pass = false;
 
-        $profile_id = Session::has('profile_id') ? Session::get('profile_id') : false;
+        $role_id = Session::has('role_id') ? Session::get('role_id') : false;
 
-        if($profile_id)
+        if($role_id)
         {
-            $profile = Role::where('id', $profile_id)->first();
+            $role = Role::where('id', $role_id)->where('status', 1)->first();
 
-            if($profile)
+            if($role)
             {
-                $role = Role::find($profile_id);
+                $user_account = User_account::where('user_id', auth()->user()->id)->where('role_id', $role_id)->where('status', 1)->first();
 
-                if(auth()->user()->hasRole($role))
+                if($user_account)
                 {
                     $pass = true;                
                 }          

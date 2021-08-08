@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\User;
 use App\Models\Model;
 use App\Models\Branch;
-use App\Models\Profile;
+use App\Models\Role;
 use App\Models\User_account;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,18 +25,18 @@ class User_accountFactory extends Factory
      */
     public function definition()
     {
-        $profile_id = $this->faker->numberBetween(1, Profile::count());
+        $role_id = $this->faker->numberBetween(1, Role::count());
 
         $branch_id = null;
 
-        if($profile_id == 2)
+        if($role_id == 2)
         {
             $branch_id = $this->faker->numberBetween(1, Branch::count());
         }
 
         return [
             'user_id' => $this->faker->numberBetween(1, User::count()),
-            'profile_id' => $profile_id,
+            'role_id' => $role_id,
             'branch_id' => $branch_id,
             'status' => $this->faker->randomElement([0, 1])
         ];

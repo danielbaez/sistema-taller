@@ -40,7 +40,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth', 'checkStatus', 'user.menu'])->group(function () {
     Route::get('/rolesList', [UserAccountsController::class, 'rolesList'])->name('rolesList');
-    Route::get('/enterRol/{user_account_id}', [UserAccountsController::class, 'enterRol'])->name('enterRol');
+    Route::get('/enterRole/{user_account_id}', [UserAccountsController::class, 'enterRole'])->name('enterRole');
 
     Route::middleware(['user.account'])->group(function () {
         Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');

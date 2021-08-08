@@ -1,11 +1,10 @@
 <?php
 
-use App\Models\Profile;
+use App\Models\Role;
 use App\Models\User_account;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\LogsController;
 use Illuminate\Support\Facades\Route;
-use Spatie\Permission\Models\Role;
 
 if(!function_exists('current_user'))
 {
@@ -15,16 +14,16 @@ if(!function_exists('current_user'))
     }
 }
 
-if(!function_exists('current_profile'))
+if(!function_exists('current_role'))
 {
-    function current_profile()
+    function current_role()
     {
-    	if(Session::has('profile_id'))
+    	if(Session::has('role_id'))
     	{
-    		return Profile::find(session('profile_id'));
+    		return Role::find(session('role_id'));
     	}
         /*User_account::where('user_id', Auth::user()->id)
-        ->with(['profile', 'branch'])->get()*/
+        ->with(['role', 'branch'])->get()*/
     }
 }
 
@@ -32,13 +31,13 @@ if(!function_exists('current_user_accounts'))
 {
     function current_user_accounts()
     {
-    	/*return User_account::whereHas('profile', function($q) {
-            $q->where('profiles.status', 1);
+    	return User_account::whereHas('role', function($q) {
+            $q->where('roles.status', 1);
         })->where('user_id', Auth::user()->id)
         ->active()
-    	->get();*/
+    	->get();
 
-        return auth()->user()->roles;
+        //return auth()->user()->roles;
     }
 }
 
@@ -108,9 +107,9 @@ if(!function_exists('rol_permission'))
 {
     function rol_permission($permission)
     {
-        $role = Role::find(session('profile_id'));
+        $role = Role::find(session('role_id'));
         
-        if(!$role->hasAllDirectPermissions($permission))
+        if(!$role->hasAllPermissions($permission))
         {
             return false;
         }
@@ -123,9 +122,9 @@ if(!function_exists('rol_permission_any'))
 {
     function rol_permission_any($permission)
     {
-        $role = Role::find(session('profile_id'));
+        $role = Role::find(session('role_id'));
         
-        if(!$role->hasAnyDirectPermission($permission))
+        if(!$role->hasAnyPermission($permission))
         {
             return false;
         }

@@ -53,7 +53,7 @@ class HomeController extends Controller
                 ->make(true);
         }
 
-        //$profiles = Profile::all();
+        //$roles = Role::all();
       
         return view('home');
     }

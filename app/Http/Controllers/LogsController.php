@@ -13,7 +13,7 @@ class LogsController extends Controller
         {
             Log::create([
                 'user_id' => auth()->user()->id,
-                'profile_id' => session()->get('profile_id'),
+                'role_id' => session()->get('role_id'),
                 'branch_id' => session()->get('branch_id'),
                 'description' => $description.($e != '' ? ' *-* '.$e : ''),
                 'status' => $status,

@@ -21,12 +21,12 @@
 					@foreach($user_accounts as $user_account)
 						<tr>
 							<th scope="row">{{ $user_account->id }}</th>
-							<td>{{ $user_account->profile->name }}</td>
-							<td>{{ $user_account->profile_id == 2 ? $user_account->branch->name : '---' }}</td>
+							<td>{{ $user_account->role->name }}</td>
+							<td>{{ $user_account->role_id == 2 ? $user_account->branch->name : '---' }}</td>
 							<td>{{ $user_account->status }}</td>
 							<td>
 								@if($user_account->status == 'Activo')
-									<a href="{{ route('enterProfile', ['user_account_id' => $user_account->id]) }}" class="btn btn-primary">Ingresar</a>
+									<a href="{{ route('enterRole', ['user_account_id' => $user_account->id]) }}" class="btn btn-primary">Ingresar</a>
 								@endif
 							</td>
 						</tr>
@@ -47,7 +47,7 @@
     @include('partials.message')
     <div class="row">
     	<div class="col-12">
-	    	<h1>Ingresa a tu Perfil de Usuario</h1> 
+	    	<h1>Ingresa a tu Rol de Usuario</h1> 
 	    </div>
     </div>
 @stop
@@ -59,7 +59,7 @@
 				<thead>
 					<tr class="text-center">
 						<th scope="col" data-export="true">#</th>
-						<th scope="col" data-export="true">Perfil</th>
+						<th scope="col" data-export="true">Rol</th>
 						<th scope="col" data-export="true">Sucursal</th>
 						<th scope="col" data-export="true">Estado</th>
 						<th scope="col" data-export="false" data-orderable="false" data-searchable="false">Acción</th>
@@ -69,14 +69,14 @@
 					@foreach($user_accounts as $user_account)
 						<tr>
 							<th scope="row">{{ $user_account->id }}</th>
-							<td>{{ $user_account->profile->name }}</td>
-							<td>{{ $user_account->profile_id == 2 ? $user_account->branch->name : '---' }}</td>
+							<td>{{ $user_account->role->name }}</td>
+							<td>{{ $user_account->role_id == 2 ? $user_account->branch->name : '---' }}</td>
 							<td>{{ $user_account->status_name }}</td>
 							<td>
-								@if($user_account->profile->status === 1 && $user_account->is_active)
-									<a href="{{ route('enterProfile', ['user_account_id' => $user_account->id]) }}" class="btn btn-primary">Ingresar</a>
+								@if($user_account->role->status === 1 && $user_account->is_active)
+									<a href="{{ route('enterRole', ['user_account_id' => $user_account->id]) }}" class="btn btn-primary">Ingresar</a>
 								@else
-									Perfil desactivado
+									Rol desactivado
 								@endif
 							</td>
 						</tr>
@@ -92,6 +92,6 @@
 		/*$('#my-table').DataTable({
 		    responsive: true
 		});*/
-		dataTableClientSide(null, null, 'perfiles', 'PERFILES', 'portrait', 'A4', false, true, true, true, false, false, true);
+		dataTableClientSide(null, null, 'roles', 'ROLES', 'portrait', 'A4', false, true, true, true, false, false, true);
 	</script>
 @stop

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Branch;
-use App\Models\Profile;
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -17,9 +17,9 @@ class User_account extends Model
     	return $this->belongsTo(User::class);
     }
 
-    public function profile()
+    public function role()
     {
-    	return $this->belongsTo(Profile::class);
+    	return $this->belongsTo(Role::class);
     }
 
     public function branch()
