@@ -12,7 +12,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    /*public function logs_store($description, $status, $e = '')
+    /*public function logsStore($description, $status, $e = '')
     {
         //$controller = App::make('\App\Http\Controllers\LogsController');
         //$controller->callAction('store', $parameters);

@@ -50,7 +50,7 @@ class UserAccountsController extends Controller
     		$request->session()->put('role_id', $user_account->role_id);
             $request->session()->put('branch_id', $user_account->branch_id);
 
-            logs_store("Ingresa con el perfil", 1);
+            logsStore("Ingresa con el perfil", 1);
 
     		return redirect()->route('dashboard');
     	}

@@ -8,21 +8,21 @@
 @stop
 
 @section('content')
-    @rolpermission($resource.'.index')
+    @hasallpermissions($resource.'.index')
         @include('partials.search')
         @include('partials.table', ['url' => route($resource.'.index'), 'columns' => $columns])
-    @endrolpermission
-    @rolpermission($resource.'.create')
+    @endhasallpermissions
+    @hasallpermissions($resource.'.create')
         @include($resource.'.create', ['form' => 'create', 'resource' => $resource, 'title' => $title_form])
-    @endrolpermission
-    @rolpermission($resource.'.index')
-        @rolpermission($resource.'.edit')
+    @endhasallpermissions
+    @hasallpermissions($resource.'.index')
+        @hasallpermissions($resource.'.edit')
             @include($resource.'.create', ['form' => 'edit', 'title' => $title_form])
-        @endrolpermission
-        @rolpermissionany([$resource.'.activate', $resource.'.destroy'])
+        @endhasallpermissions
+        @hasanypermission([$resource.'.activate', $resource.'.destroy'])
             @include('partials.form.activate_or_desactivate', ['title' => $title_form])
-        @endrolpermissionany
-    @endrolpermission
+        @endhasanypermission
+    @endhasallpermissions
 @stop
 
 @section('js')

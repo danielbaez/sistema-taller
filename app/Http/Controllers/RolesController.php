@@ -12,7 +12,7 @@ class RolesController extends Controller
 {
     public function __construct()
     {
-        user_permissions($this);
+        userPermissions($this);
     }
 
     public function index(Request $request)
@@ -46,7 +46,7 @@ class RolesController extends Controller
             ['title' => 'Estado', 'data' => 'status_name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true']
         ];
 
-        if(rol_permission_any([$resource.'.edit', $resource.'.destroy', $resource.'.activate']))
+        if(hasAnyPermission([$resource.'.edit', $resource.'.destroy', $resource.'.activate']))
         {
             $columns[] = ['title' => 'Acción', 'data' => 'action', 'export' => 'false', 'orderable' => 'false', 'searchable' => 'false'];
         }
@@ -81,7 +81,7 @@ class RolesController extends Controller
 
             $role->permissions()->sync($request->permissions);
 
-            logs_store("Se ha creado el rol $role->name - id: $role->id", 1);
+            logsStore("Se ha creado el rol $role->name - id: $role->id", 1);
 
             //throw new \Exception("Hubo un error en la transacción");
 
@@ -91,7 +91,7 @@ class RolesController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logs_store("Error al crear el rol", 0, $e);
+            logsStore("Error al crear el rol", 0, $e);
 
             $success = false;
         }
@@ -151,7 +151,7 @@ class RolesController extends Controller
 
             $role->permissions()->sync($request->permissions);
 
-            logs_store("Se ha actualizado el rol $role->name - id: $role->id", 1);
+            logsStore("Se ha actualizado el rol $role->name - id: $role->id", 1);
 
             DB::commit();
 
@@ -159,7 +159,7 @@ class RolesController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logs_store("Error al actualizar el rol - id: $role->id", 0, $e);
+            logsStore("Error al actualizar el rol - id: $role->id", 0, $e);
 
             $success = false;
         }
@@ -198,7 +198,7 @@ class RolesController extends Controller
             $role->status = !empty($request->get('status')) ? $request->get('status') : 0;
             $role->save();
 
-            logs_store("Se ha $status_success el rol $role->name - id: $role->id", 1);
+            logsStore("Se ha $status_success el rol $role->name - id: $role->id", 1);
 
             DB::commit();
 
@@ -206,7 +206,7 @@ class RolesController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logs_store("Error al $status_error el rol - id: $role->id", 0, $e);
+            logsStore("Error al $status_error el rol - id: $role->id", 0, $e);
 
             $success = false;
         }

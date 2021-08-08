@@ -13,7 +13,7 @@ class UsersController extends Controller
 {
     public function __construct()
     {
-        user_permissions($this);
+        userPermissions($this);
     }
 
     public function index(Request $request)
@@ -41,7 +41,7 @@ class UsersController extends Controller
             ['title' => 'Estado', 'data' => 'status_name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true']
         ];
 
-        if(rol_permission_any([$resource.'.edit', $resource.'.destroy', $resource.'.activate']))
+        if(hasAnyPermission([$resource.'.edit', $resource.'.destroy', $resource.'.activate']))
         {
             $columns[] = ['title' => 'Acción', 'data' => 'action', 'export' => 'false', 'orderable' => 'false', 'searchable' => 'false'];
         }
@@ -81,7 +81,7 @@ class UsersController extends Controller
 
             $user->roles()->sync($request->roles);
 
-            logs_store("Se ha creado el usuario $user->name - id: $user->id", 1);
+            logsStore("Se ha creado el usuario $user->name - id: $user->id", 1);
 
             //throw new \Exception("Hubo un error en la transacción");
 
@@ -91,7 +91,7 @@ class UsersController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logs_store("Error al crear el usuario", 0, $e);
+            logsStore("Error al crear el usuario", 0, $e);
 
             $success = false;
         }
@@ -149,7 +149,7 @@ class UsersController extends Controller
 
             $user->roles()->sync($request->roles);
 
-            logs_store("Se ha actualizado el usuario $user->name - id: $user->id", 1);
+            logsStore("Se ha actualizado el usuario $user->name - id: $user->id", 1);
 
             DB::commit();
 
@@ -157,7 +157,7 @@ class UsersController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logs_store("Error al actualizar el usuario - id: $user->id", 0, $e);
+            logsStore("Error al actualizar el usuario - id: $user->id", 0, $e);
 
             $success = false;
         }
@@ -196,7 +196,7 @@ class UsersController extends Controller
             $user->status = !empty($request->get('status')) ? $request->get('status') : 0;
             $user->save();
 
-            logs_store("Se ha $status_success el usuario $user->name - id: $user->id", 1);
+            logsStore("Se ha $status_success el usuario $user->name - id: $user->id", 1);
 
             DB::commit();
 
@@ -204,7 +204,7 @@ class UsersController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logs_store("Error al $status_error el usuario - id: $user->id", 0, $e);
+            logsStore("Error al $status_error el usuario - id: $user->id", 0, $e);
 
             $success = false;
         }

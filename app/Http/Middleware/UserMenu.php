@@ -21,7 +21,7 @@ class UserMenu
         {
             if(Session::has('role_id'))
             {
-                logs_store("Sale del perfil", 1);
+                logsStore("Sale del perfil", 1);
             }
 
             Session::forget('user_account_id');

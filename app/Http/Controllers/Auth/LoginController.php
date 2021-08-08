@@ -52,14 +52,14 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        logs_store("Inicia sesión", 1);
+        logsStore("Inicia sesión", 1);
 
         return redirect(RouteServiceProvider::HOME);
     }
 
     protected function logout(Request $request)
     {
-        logs_store("Cierra sesión", 1);
+        logsStore("Cierra sesión", 1);
 
         $this->guard()->logout();
 

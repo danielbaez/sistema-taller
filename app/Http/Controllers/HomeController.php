@@ -10,7 +10,7 @@ class HomeController extends Controller
 {
     public function __construct()
     {
-        user_permissions($this, ['dashboard'], false);
+        userPermissions($this, ['dashboard'], false);
     }
 
     public function index()

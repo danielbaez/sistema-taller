@@ -28,12 +28,12 @@ class AppServiceProvider extends ServiceProvider
           return "<?php echo abc($permission); ?>";
         });
 
-        Blade::if('rolpermission', function ($permission) {
-            return rol_permission($permission);
+        Blade::if('hasallpermissions', function ($permission) {
+            return hasAllPermissions($permission);
         });
 
-        Blade::if('rolpermissionany', function ($permission) {
-            return rol_permission_any($permission);
+        Blade::if('hasanypermission', function ($permission) {
+            return hasAnyPermission($permission);
         });
     }
 }

@@ -12,7 +12,7 @@ class ProfilesController extends Controller
 {
     public function __construct()
     {
-        user_permissions($this);
+        userPermissions($this);
     }
     
     public function index(Request $request)
@@ -46,7 +46,7 @@ class ProfilesController extends Controller
             ['title' => 'Estado', 'data' => 'status_name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true']
         ];
 
-        if(rol_permission_any([$resource.'.edit', $resource.'.destroy', $resource.'.activate']))
+        if(hasAnyPermission([$resource.'.edit', $resource.'.destroy', $resource.'.activate']))
         {
             $columns[] = ['title' => 'Acción', 'data' => 'action', 'export' => 'false', 'orderable' => 'false', 'searchable' => 'false'];
         }
@@ -77,7 +77,7 @@ class ProfilesController extends Controller
         try {
             $profile = Profile::create($request->all());
 
-            logs_store("Se ha creado el perfil $profile->name - id: $profile->id", 1);
+            logsStore("Se ha creado el perfil $profile->name - id: $profile->id", 1);
 
             //throw new \Exception("Hubo un error en la transacción");
 
@@ -87,7 +87,7 @@ class ProfilesController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logs_store("Error al crear el perfil", 0, $e);
+            logsStore("Error al crear el perfil", 0, $e);
 
             $success = false;
         }
@@ -143,7 +143,7 @@ class ProfilesController extends Controller
             $profile->name = $request->get('name');
             $profile->save();
 
-            logs_store("Se ha actualizado el perfil $profile->name - id: $profile->id", 1);
+            logsStore("Se ha actualizado el perfil $profile->name - id: $profile->id", 1);
 
             DB::commit();
 
@@ -151,7 +151,7 @@ class ProfilesController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logs_store("Error al actualizar el perfil - id: $profile->id", 0, $e);
+            logsStore("Error al actualizar el perfil - id: $profile->id", 0, $e);
 
             $success = false;
         }
@@ -190,7 +190,7 @@ class ProfilesController extends Controller
             $profile->status = !empty($request->get('status')) ? $request->get('status') : 0;
             $profile->save();
 
-            logs_store("Se ha $status_success el perfil $profile->name - id: $profile->id", 1);
+            logsStore("Se ha $status_success el perfil $profile->name - id: $profile->id", 1);
 
             DB::commit();
 
@@ -198,7 +198,7 @@ class ProfilesController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logs_store("Error al $status_error el perfil - id: $profile->id", 0, $e);
+            logsStore("Error al $status_error el perfil - id: $profile->id", 0, $e);
 
             $success = false;
         }

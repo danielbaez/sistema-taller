@@ -6,17 +6,17 @@ use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\LogsController;
 use Illuminate\Support\Facades\Route;
 
-if(!function_exists('current_user'))
+if(!function_exists('currentUser'))
 {
-    function current_user()
+    function currentUser()
     {
         return auth()->user();
     }
 }
 
-if(!function_exists('current_role'))
+if(!function_exists('currentRole'))
 {
-    function current_role()
+    function currentRole()
     {
     	if(Session::has('role_id'))
     	{
@@ -27,9 +27,9 @@ if(!function_exists('current_role'))
     }
 }
 
-if(!function_exists('current_user_accounts'))
+if(!function_exists('currentUserAccounts'))
 {
-    function current_user_accounts()
+    function currentUserAccounts()
     {
     	return User_account::whereHas('role', function($q) {
             $q->where('roles.status', 1);
@@ -41,17 +41,17 @@ if(!function_exists('current_user_accounts'))
     }
 }
 
-if(!function_exists('logs_store'))
+if(!function_exists('logsStore'))
 {
-    function logs_store($description, $status, $e = '')
+    function logsStore($description, $status, $e = '')
     {
         (new LogsController)->store($description, $status, $e);
     }
 }
 
-if(!function_exists('user_permissions'))
+if(!function_exists('userPermissions'))
 {
-    function user_permissions($instance, $permissions = [], $default_permissions = true, $resource = '')
+    function userPermissions($instance, $permissions = [], $default_permissions = true, $resource = '')
     {
         if(!$resource)
         {
@@ -103,9 +103,9 @@ if(!function_exists('user_permissions'))
     }
 }
 
-if(!function_exists('rol_permission'))
+if(!function_exists('hasAllPermissions'))
 {
-    function rol_permission($permission)
+    function hasAllPermissions($permission)
     {
         $role = Role::find(session('role_id'));
         
@@ -118,9 +118,9 @@ if(!function_exists('rol_permission'))
     }
 }
 
-if(!function_exists('rol_permission_any'))
+if(!function_exists('hasAnyPermission'))
 {
-    function rol_permission_any($permission)
+    function hasAnyPermission($permission)
     {
         $role = Role::find(session('role_id'));
         
