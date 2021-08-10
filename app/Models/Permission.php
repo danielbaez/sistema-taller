@@ -23,7 +23,7 @@ class Permission extends Model
         return config('system.status.'.$this->status);
     }
 
-    public function syncRoles(...$roles)
+    /*public function syncRoles(...$roles)
     {
         $this->roles()->detach();
 
@@ -43,6 +43,11 @@ class Permission extends Model
         ->all();
 
         $this->roles()->sync($roles, false);
+    }*/
+
+    public function syncRoles($roles)
+    {
+        $this->roles()->sync($roles);
     }
 
     protected function getStoredRole($role)

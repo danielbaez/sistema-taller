@@ -79,7 +79,7 @@ class RolesController extends Controller
         try {
             $role = Role::create($request->all());
 
-            $role->permissions()->sync($request->permissions);
+            $role->syncPermissions($request->permissions);
 
             logsStore("Se ha creado el rol $role->name - id: $role->id", 1);
 
@@ -149,7 +149,7 @@ class RolesController extends Controller
             $role->name = $request->get('name');
             $role->save();
 
-            $role->permissions()->sync($request->permissions);
+            $role->syncPermissions($request->permissions);
 
             logsStore("Se ha actualizado el rol $role->name - id: $role->id", 1);
 
