@@ -7,6 +7,7 @@ use DataTables;
 use App\Models\Role;
 use App\Models\Permission;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\RoleRequest;
 
 class RolesController extends Controller
 {
@@ -72,7 +73,7 @@ class RolesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
         DB::beginTransaction();
 
@@ -141,7 +142,7 @@ class RolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(RoleRequest $request, Role $role)
     {
         DB::beginTransaction();
 

@@ -26,10 +26,8 @@ class RoleRequest extends FormRequest
     {
         return [
             //'name' => 'required|unique:roles|max:20',
-            'name' => [
-                'required',
-                Rule::unique('roles', 'name')->ignore($this->role),
-            ],
+            'name' => ['required', Rule::unique('roles', 'name')->ignore($this->role)],
+            'permissions' => 'required'
             //'status' => 'required|in:0,1'
         ];
     }
@@ -38,6 +36,7 @@ class RoleRequest extends FormRequest
     {
         return [
             'name' => 'Perfil',
+            'permissions' => 'Permisos'
             //'status' => 'Estado'
         ];
     }

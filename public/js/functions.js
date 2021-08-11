@@ -792,6 +792,12 @@ $(document).on('click', '.btn-submit-create, .btn-submit-edit, .btn-submit-statu
     var url = form.attr('action');
     var data = form.serialize();
     var modal = ($this.parents('.modal'));
+    var text_button = $this.html();
+    removeValidationErrorMessage();
+
+    $this.html('Enviando <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+
+    modal.find('button.close').attr('disabled', true);
 
     $.ajax({
    		type: form.attr('method'),
@@ -809,10 +815,14 @@ $(document).on('click', '.btn-submit-create, .btn-submit-edit, .btn-submit-statu
       		modal.modal('hide');
       		form.trigger('reset');
       		$this.attr('disabled', false);
-
+      		$this.html(text_button);
+      		modal.find('button.close').attr('disabled', false);
       		showAlert(data.success, data.message);
         },
         error: function(response){
+        	$this.html(text_button);
+        	modal.find('button.close').attr('disabled', false);
+
         	if(response.status == 419) {
         		modal.modal('hide');
       			form.trigger('reset');
@@ -842,6 +852,8 @@ $(document).on('click', '#edit', function(e) {
       			$('#modalEdit').find('form').find(":input").each(function(v) {
       				var type = $(this).attr('type');
       				var name = $(this).attr('name');
+      				var id = $(this).attr('id');
+      				var name_default = $(this).attr('name');
       				var isArray = false;
       				
       				if(name && name.indexOf('[]') >= 0) {
@@ -850,10 +862,10 @@ $(document).on('click', '#edit', function(e) {
       				}
 
       				var tag_name = $(this).prop("tagName").toLowerCase();
+      				//console.log(tag_name+'[name="'+name_default+'"]');
 
-      				var id = $('#modalCreate').find(tag_name+'[name="'+name+'"]').attr('id');
-  					$('#modalCreate').find(tag_name+'[name="'+name+'"]').attr('id', '_');
-  					$('#modalCreate').find(tag_name+'[name="'+name+'"]').attr('data-id', id);
+      				$('#modalCreate').find(tag_name+'[name="'+name_default+'"][id="'+id+'"]').attr('data-id', id);
+					$('#modalCreate').find(tag_name+'[name="'+name_default+'"][id="'+id+'"]').attr('id', '_');
 
       				if(tag_name == 'input') {
       					switch(type) {
@@ -939,13 +951,21 @@ function showAlert(status, message, animateTop = true) {
 }
 
 function validationErrorMessage(form, errors) {
+	removeValidationErrorMessage();
+
 	$.each(errors, function(field_name, error) {
+		form.find('[name="'+field_name+'"]').after('<span class="validation-error-message font-weight-bold text-danger">'+error+'</span>');
+
+		form.find('[name="'+field_name+'[]"]').parents('.form-group').append('<span class="validation-error-message font-weight-bold text-danger">'+error+'</span>');
+    })
+
+	/*$.each(errors, function(field_name, error) {
 		if(form.find('[name='+field_name+']').next().hasClass('validation-error-message')) {
 			form.find('[name='+field_name+']').next().remove();
 		}
 
 		form.find('[name='+field_name+']').after('<span class="validation-error-message font-weight-bold text-danger">'+error+'</span>');
-    })
+    })*/
 }
 
 function removeValidationErrorMessage(form, errors) {
