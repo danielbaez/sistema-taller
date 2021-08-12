@@ -8,7 +8,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="PUT">
+        <form method="PUT" autocomplete="off">
           @yield('form_content')
           <div class="modal-footer">
             @yield('form_button', view('partials.form.edit_button'))

@@ -21,6 +21,14 @@ if($form == 'edit')
     <input type="text" class="form-control" id="name" name="name">
   </div>
   <div class="form-group">
+    <label for="email">Email</label>
+    <input type="email" class="form-control" id="email" name="email" autocomplete="new-email">
+  </div>
+  <div class="form-group">
+    <label for="password">Contraseña</label>
+    <input type="password" class="form-control" id="password" name="password" autocomplete="new-password">
+  </div>
+  <!-- <div class="form-group">
     <label for="status">Roles</label>
     <br>
     @foreach($roles as $rol)
@@ -29,5 +37,5 @@ if($form == 'edit')
         <label class="form-check-label" for="{{ $rol->name }}">{{ $rol->name }}</label>
       </div>
     @endforeach
-  </div>
+  </div> -->
 @stop

@@ -8,6 +8,8 @@ use App\Http\Requests\RoleRequest;
 use DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Models\Role;
+use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -67,19 +69,19 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
         DB::beginTransaction();
 
         try {
             $user = User::create([
                 'name' => $request->name,
-                'email' => $request->name,
-                'password' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
                 'status' => 1
             ]);
 
-            $user->roles()->sync($request->roles);
+            //$user->roles()->sync($request->roles);
 
             logsStore("Se ha creado el usuario $user->name - id: $user->id", 1);
 
@@ -118,7 +120,7 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        return User::with('roles')->where('id', $id)->first();
+        return User::findOrFail($id);
     }
 
     /**
@@ -139,15 +141,17 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(UserRequest $request, User $user)
     {
         DB::beginTransaction();
 
         try {
             $user->name = $request->get('name');
+            $user->email = $request->get('email');
+            $user->password = Hash::make($request->password);
             $user->save();
 
-            $user->roles()->sync($request->roles);
+            //$user->roles()->sync($request->roles);
 
             logsStore("Se ha actualizado el usuario $user->name - id: $user->id", 1);
 

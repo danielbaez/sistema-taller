@@ -8,7 +8,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="DELETE">
+        <form method="DELETE" autocomplete="off">
           <p class="text-center font-weight-bold">¿Está seguro que desea <span class="text-status"></span>?</p>
           <input type="hidden" name="status">
           <div class="modal-footer">

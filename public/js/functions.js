@@ -891,6 +891,9 @@ $(document).on('click', '#edit', function(e) {
 									}
 								}
 							break;
+							default:
+								$(this).val(data[name]);
+							break;
 						}
       				}else if(tag_name == 'select') {
       					$(this).val(data[name]);
