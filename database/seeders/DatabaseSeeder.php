@@ -62,7 +62,7 @@ class DatabaseSeeder extends Seeder
 
         		User_account::create($data);*/
 
-                User_account::create($value->toArray());	
+                User_account::create($value->getAttributes());	
         	}	
     	}
     }
