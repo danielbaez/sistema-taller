@@ -75,7 +75,7 @@
 							<td>
 								@if($userAccount->role->status === 1 && $userAccount->is_active)
 									<a href="{{ route('enterRole', ['userAccountId' => $userAccount->id]) }}" class="btn btn-primary">Ingresar</a>
-								@else
+								@elseif($userAccount->role->status === 0)
 									Rol desactivado
 								@endif
 							</td>

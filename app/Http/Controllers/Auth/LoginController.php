@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -48,6 +49,34 @@ class LoginController extends Controller
     {
         //return $request->only($this->username(), 'password');
         return ['email' => $request->{$this->username()}, 'password' => $request->password, 'status' => 1];
+    }
+
+    /*protected function sendFailedLoginResponse(Request $request)
+    {
+        dd($this->guard()->user());
+        dd($this->username());
+        throw ValidationException::withMessages([
+               'email' => 'username or password is incorrect!!!'
+            ]);
+    }*/
+
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        $errors = [$this->username() => trans('auth.failed')];
+
+        $user = \App\Models\User::where($this->username(), $request->{$this->username()})->first();
+
+        if ($user && \Hash::check($request->password, $user->password) && $user->status != 1) {
+            $errors = [$this->username() => 'Tu cuenta está desactivada.'];
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json($errors, 422);
+        }
+
+        return redirect()->back()
+            ->withInput($request->only($this->username(), 'remember'))
+            ->withErrors($errors);
     }
 
     protected function authenticated(Request $request, $user)

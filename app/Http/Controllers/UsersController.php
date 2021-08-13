@@ -148,10 +148,13 @@ class UsersController extends Controller
         try {
             $user->name = $request->get('name');
             $user->email = $request->get('email');
-            $user->password = Hash::make($request->password);
-            $user->save();
 
-            //$user->roles()->sync($request->roles);
+            if(!empty($request->password))
+            {
+                $user->password = Hash::make($request->password);    
+            }
+            
+            $user->save();
 
             logsStore("Se ha actualizado el usuario $user->name - id: $user->id", 1);
 
