@@ -33,7 +33,7 @@ Route::middleware(['auth', 'checkStatus', 'user.menu'])->group(function () {
         Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
         Route::resource('/usuarios', UsersController::class, ['names' => 'users'])->parameters(['usuarios' => 'user']);
         Route::resource('/roles', RolesController::class, ['names' => 'roles'])->parameters(['roles' => 'role']);
-        Route::resource('/roles-usuarios', UsersAccountsController::class, ['names' => 'userAccounts'])->parameters(['roles-usuarios' => 'userAccount']);
+        Route::resource('/roles-usuarios', UsersAccountsController::class, ['names' => 'usersAccounts'])->parameters(['roles-usuarios' => 'userAccount']);
     });
 });
 

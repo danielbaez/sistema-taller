@@ -27,9 +27,9 @@ if(!function_exists('currentRole'))
     }
 }
 
-if(!function_exists('currentUserAccounts'))
+if(!function_exists('currentUsersAccounts'))
 {
-    function currentUserAccounts()
+    function currentUsersAccounts()
     {
     	return UserAccount::whereHas('role', function($q) {
             $q->where('roles.status', 1);
