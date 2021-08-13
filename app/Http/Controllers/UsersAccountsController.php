@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\DB;
 
 class UsersAccountsController extends Controller
 {
+    public $title = 'Roles de Usuarios';
+    public $titleForm = 'Rol de Usuario';
+    public $titleMessageLog = 'el rol de usuario';
+
     public function __construct()
     {
         userPermissions($this);
@@ -42,8 +46,8 @@ class UsersAccountsController extends Controller
                 ->make(true);
         }
 
-        $title = 'Roles de Usuarios';
-        $titleForm = 'Rol de Usuario';
+        $title = $this->title;
+        $titleForm = $this->titleForm;
 
         $columns = [
             ['title' => '#', 'data' => 'id', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
@@ -72,9 +76,7 @@ class UsersAccountsController extends Controller
         try {
             $userAccount = UserAccount::create($request->all());
 
-            logsStore("Se ha creado el rol de usuario - id: $userAccount->id", 1);
-
-            //throw new \Exception("Hubo un error en la transacción");
+            logsStore("store", "$this->titleMessageLog - id: $userAccount->id", 1);
 
             DB::commit();
 
@@ -82,21 +84,12 @@ class UsersAccountsController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logsStore("Error al crear el rol de usuario", 0, $e);
+            logsStore("store", $this->titleMessageLog, 0, $e);
 
             $success = false;
         }
 
-        if($success)
-        {
-            $message = '¡Se ha registrado el rol de usuario correctamente!';
-        }
-        else
-        {
-            $message = '¡Error al registrar el rol de usuario!';
-        }
-
-        //$request->session()->flash('message', [$success, $message]);
+        $message = actionMessage('store', $success, $this->titleMessageLog);
 
         return response()->json(['success' => $success, 'message' => $message]);
     }
@@ -118,7 +111,7 @@ class UsersAccountsController extends Controller
         try {
             $userAccount->update($request->all());
 
-            logsStore("Se ha actualizado el rol de usuario - id: $userAccount->id", 1);
+            logsStore("update", "$this->titleMessageLog - id: $userAccount->id", 1);
 
             DB::commit();
 
@@ -126,28 +119,19 @@ class UsersAccountsController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logsStore("Error al actualizar el rol de usuario - id: $userAccount->id", 0, $e);
+            logsStore("update", "$this->titleMessageLog - id: $userAccount->id", 0, $e);
 
             $success = false;
         }
 
-        if($success)
-        {
-            $message = '¡Se ha actualizado el rol de usuario correctamente!';
-        }
-        else
-        {
-            $message = '¡Error al actualizar el rol de usuario!';
-        }
-
-        //$request->session()->flash('message', [$success, $message]);
+        $message = actionMessage('update', $success, $this->titleMessageLog);
 
         return response()->json(['success' => $success, 'message' => $message]);
     }
 
     public function destroy(Request $request, UserAccount $userAccount)
     {
-        return destroyGeneric($request, $userAccount, 'el rol de usuario');
+        return destroyGeneric($request, $userAccount, $this->titleMessageLog);
     }
 
     public function rolesList(Request $request)
@@ -190,7 +174,7 @@ class UsersAccountsController extends Controller
     		$request->session()->put('roleId', $user_account->role_id);
             $request->session()->put('branchId', $user_account->branch_id);
 
-            logsStore("Ingresa con el perfil", 1);
+            logsStore(false, "Ingresa con el rol de usuario id: $user_account->id", 1);
 
     		return redirect()->route('dashboard');
     	}

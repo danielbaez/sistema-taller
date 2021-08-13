@@ -21,7 +21,7 @@ class UserMenu
         {
             if(Session::has('roleId'))
             {
-                logsStore("Sale del perfil", 1);
+                logsStore(false, "Sale del rol de usuario id: ".session('userAccountId'), 1);
             }
 
             Session::forget('userAccountId');

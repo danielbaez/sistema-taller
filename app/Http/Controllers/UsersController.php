@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
+    public $title = 'Usuarios';
+    public $titleForm = 'Usuario';
+    public $titleMessageLog = 'el usuario';
+
     public function __construct()
     {
         userPermissions($this);
@@ -34,8 +38,8 @@ class UsersController extends Controller
                 ->make(true);
         }
 
-        $title = 'Usuarios';
-        $titleForm = 'Usuario';
+        $title = $this->title;
+        $titleForm = $this->titleForm;
 
         $columns = [
             ['title' => '#', 'data' => 'id', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
@@ -81,11 +85,7 @@ class UsersController extends Controller
                 'status' => 1
             ]);
 
-            //$user->roles()->sync($request->roles);
-
-            logsStore("Se ha creado el usuario $user->name - id: $user->id", 1);
-
-            //throw new \Exception("Hubo un error en la transacción");
+            logsStore("store", "$this->titleMessageLog $user->name - id: $user->id", 1);
 
             DB::commit();
 
@@ -93,21 +93,12 @@ class UsersController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logsStore("Error al crear el usuario", 0, $e);
+            logsStore("store", $this->titleMessageLog, 0, $e);
 
             $success = false;
         }
 
-        if($success)
-        {
-            $message = '¡Se ha registrado el usuario correctamente!';
-        }
-        else
-        {
-            $message = '¡Error al registrar el usuario!';
-        }
-
-        //$request->session()->flash('message', [$success, $message]);
+        $message = actionMessage('store', $success, $this->titleMessageLog);
 
         return response()->json(['success' => $success, 'message' => $message]);
     }
@@ -156,7 +147,7 @@ class UsersController extends Controller
             
             $user->save();
 
-            logsStore("Se ha actualizado el usuario $user->name - id: $user->id", 1);
+            logsStore("update", "$this->titleMessageLog $user->name - id: $user->id", 1);
 
             DB::commit();
 
@@ -164,21 +155,12 @@ class UsersController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logsStore("Error al actualizar el usuario - id: $user->id", 0, $e);
+            logsStore("update", "$this->titleMessageLog - id: $user->id", 0, $e);
 
             $success = false;
         }
 
-        if($success)
-        {
-            $message = '¡Se ha actualizado el usuario correctamente!';
-        }
-        else
-        {
-            $message = '¡Error al actualizar el usuario!';
-        }
-
-        //$request->session()->flash('message', [$success, $message]);
+        $message = actionMessage('update', $success, $this->titleMessageLog);
 
         return response()->json(['success' => $success, 'message' => $message]);
     }
@@ -191,6 +173,6 @@ class UsersController extends Controller
      */
     public function destroy(Request $request, User $user)
     {
-        return destroyGeneric($request, $user, 'el usuario '.$user->name);
+        return destroyGeneric($request, $user, $this->titleMessageLog.' '.$user->name);
     }
 }

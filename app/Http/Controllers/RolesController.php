@@ -11,6 +11,10 @@ use App\Http\Requests\RoleRequest;
 
 class RolesController extends Controller
 {
+    public $title = 'Roles';
+    public $titleForm = 'Rol';
+    public $titleMessageLog = 'el rol';
+
     public function __construct()
     {
         userPermissions($this);
@@ -38,8 +42,8 @@ class RolesController extends Controller
                 ->make(true);
         }
 
-        $title = 'Roles';
-        $titleForm = 'Rol';
+        $title = $this->title;
+        $titleForm = $this->titleForm;
 
         $columns = [
             ['title' => '#', 'data' => 'id', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
@@ -82,7 +86,7 @@ class RolesController extends Controller
 
             $role->syncPermissions($request->permissions);
 
-            logsStore("Se ha creado el rol $role->name - id: $role->id", 1);
+            logsStore("store", "$this->titleMessageLog $role->name - id: $role->id", 1);
 
             //throw new \Exception("Hubo un error en la transacción");
 
@@ -92,21 +96,12 @@ class RolesController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logsStore("Error al crear el rol", 0, $e);
+            logsStore("store", $this->titleMessageLog, 0, $e);
 
             $success = false;
         }
 
-        if($success)
-        {
-            $message = '¡Se ha registrado el rol correctamente!';
-        }
-        else
-        {
-            $message = '¡Error al registrar el rol!';
-        }
-
-        //$request->session()->flash('message', [$success, $message]);
+        $message = actionMessage('store', $success, $this->titleMessageLog);
 
         return response()->json(['success' => $success, 'message' => $message]);
     }
@@ -152,7 +147,7 @@ class RolesController extends Controller
 
             $role->syncPermissions($request->permissions);
 
-            logsStore("Se ha actualizado el rol $role->name - id: $role->id", 1);
+            logsStore("update", "$this->titleMessageLog $role->name - id: $role->id", 1);
 
             DB::commit();
 
@@ -160,21 +155,12 @@ class RolesController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logsStore("Error al actualizar el rol - id: $role->id", 0, $e);
+            logsStore("update", "$this->titleMessageLog - id: $role->id", 0, $e);
 
             $success = false;
         }
 
-        if($success)
-        {
-            $message = '¡Se ha actualizado el rol correctamente!';
-        }
-        else
-        {
-            $message = '¡Error al actualizar el rol!';
-        }
-
-        //$request->session()->flash('message', [$success, $message]);
+        $message = actionMessage('update', $success, $this->titleMessageLog);
 
         return response()->json(['success' => $success, 'message' => $message]);
     }
@@ -187,6 +173,6 @@ class RolesController extends Controller
      */
     public function destroy(Request $request, Role $role)
     {
-        return destroyGeneric($request, $role, 'el rol '.$role->name);
+        return destroyGeneric($request, $role, $this->titleMessageLog.' '.$role->name);
     }
 }

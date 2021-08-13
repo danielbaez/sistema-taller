@@ -43,9 +43,9 @@ if(!function_exists('currentUsersAccounts'))
 
 if(!function_exists('logsStore'))
 {
-    function logsStore($description, $status, $e = '')
+    function logsStore($action, $description, $status, $e = '')
     {
-        (new LogsController)->store($description, $status, $e);
+        (new LogsController)->store($action, $description, $status, $e);
     }
 }
 
@@ -133,6 +133,42 @@ if(!function_exists('hasAnyPermission'))
     }
 }
 
+if(!function_exists('actionMessage'))
+{
+    function actionMessage($action, $status, $description)
+    {
+        $push = $status ? ' correctamente' : '';
+
+        if($action)
+        {
+            if($action == 'store')
+            {
+                $desc = $status ? 'Se ha creado ' : 'Error al crear ';
+            }
+            if($action == 'update')
+            {
+                $desc = $status ? 'Se ha editado ' : 'Error al editar ';
+            }
+            if($action == 'destroy')
+            {
+                $desc = $status ? 'Se ha desactivado ' : 'Error al desactivar ';
+            }
+            if($action == 'activate')
+            {
+                $desc = $status ? 'Se ha activado ' : 'Error al activar ';
+            }
+
+            $desc = '¡'.$desc.$description.$push.'!';    
+        }
+        else
+        {
+            $desc = '¡'.$description.$push.'!';
+        }
+
+        return $desc;
+    }
+}
+
 if(!function_exists('destroyGeneric'))
 {
     function destroyGeneric($request, $model, $title)
@@ -140,6 +176,7 @@ if(!function_exists('destroyGeneric'))
         $status = !empty($request->get('status')) ? $request->get('status') : 0;
         
         $statusSuccess = $status == 1 ? 'activado' : 'desactivado';
+        $action = $status == 1 ? 'activate' : 'destroy';
 
         $statusError = $status == 1 ? 'activar' : 'desactivar';
 
@@ -149,7 +186,7 @@ if(!function_exists('destroyGeneric'))
             $model->status = !empty($request->get('status')) ? $request->get('status') : 0;
             $model->save();
 
-            logsStore("Se ha $statusSuccess $title - id: $model->id", 1);
+            logsStore($action, "$title - id: $model->id", 1);
 
             DB::commit();
 
@@ -157,21 +194,12 @@ if(!function_exists('destroyGeneric'))
         } catch (\Exception $e) {
             DB::rollback();
             
-            logsStore("Error al $statusError $title - id: $model->id", 0, $e);
+            logsStore($action, "$title - id: $model->id", 0, $e);
 
             $success = false;
         }
 
-        if($success)
-        {
-            $message = "¡Se ha $statusSuccess $title correctamente!";
-        }
-        else
-        {
-            $message = "¡Error al $statusError $title!";
-        }
-
-        //$request->session()->flash('message', [$success, $message]);
+        $message = actionMessage($action, $success, $title);
 
         return response()->json(['success' => $success, 'message' => $message]);
     }
