@@ -187,42 +187,6 @@ class RolesController extends Controller
      */
     public function destroy(Request $request, Role $role)
     {
-        $status = !empty($request->get('status')) ? $request->get('status') : 0;
-        
-        $status_success = $status == 1 ? 'activado' : 'desactivado';
-
-        $status_error = $status == 1 ? 'activar' : 'desactivar';
-
-        DB::beginTransaction();
-
-        try {
-            $role->status = !empty($request->get('status')) ? $request->get('status') : 0;
-            $role->save();
-
-            logsStore("Se ha $status_success el rol $role->name - id: $role->id", 1);
-
-            DB::commit();
-
-            $success = true;
-        } catch (\Exception $e) {
-            DB::rollback();
-            
-            logsStore("Error al $status_error el rol - id: $role->id", 0, $e);
-
-            $success = false;
-        }
-
-        if($success)
-        {
-            $message = "¡Se ha $status_success el rol correctamente!";
-        }
-        else
-        {
-            $message = "¡Error al $status_error el rol!";
-        }
-
-        //$request->session()->flash('message', [$success, $message]);
-
-        return response()->json(['success' => $success, 'message' => $message]);
+        return destroyGeneric($request, $role, 'el rol '.$role->name);
     }
 }

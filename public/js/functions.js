@@ -674,65 +674,73 @@ function overwriteExport(tableId, tableColumns, method='GET', dataForm='') {
 		        var newData = [];
 
 		        for(var i=0; i<columnsExport.length; i++) {
-		          if($.isArray(columnsExport[i].column)) {
-		            if(columnsExport[i].condition) {
-		              newData.push(theArray[index][columnsExport[i].column[0]][columnsExport[i].column[1]] == columnsExport[i].condition[0] ? columnsExport[i].condition[1] : columnsExport[i].condition[2]);
-		            }else if(columnsExport[i].join) {
-		              newData.push(theArray[index][columnsExport[i].column[0]][columnsExport[i].column[1]]+' '+theArray[index][columnsExport[i].join[0]][columnsExport[i].join[1]]);
-		            }else{
-		              newData.push(theArray[index][columnsExport[i].column[0]][columnsExport[i].column[1]]);
-		            }           
-		          }else {
+					if($.isArray(columnsExport[i].column)) {
+						if(columnsExport[i].condition) {
+						  newData.push(theArray[index][columnsExport[i].column[0]][columnsExport[i].column[1]] == columnsExport[i].condition[0] ? columnsExport[i].condition[1] : columnsExport[i].condition[2]);
+						}else if(columnsExport[i].join) {
+						  newData.push(theArray[index][columnsExport[i].column[0]][columnsExport[i].column[1]]+' '+theArray[index][columnsExport[i].join[0]][columnsExport[i].join[1]]);
+						}else {
+						  newData.push(theArray[index][columnsExport[i].column[0]][columnsExport[i].column[1]]);
+						}           
+					}else {
+						if(columnsExport[i].equal) {
+					  		newData.push(theArray[index][columnsExport[i].column] == columnsExport[i].equal[0] ? columnsExport[i].equal[1] : part[columnsExport[i].equal[2]]);
+						}
 
-		            if(columnsExport[i].equal) {
-		              newData.push(theArray[index][columnsExport[i].column] == columnsExport[i].equal[0] ? columnsExport[i].equal[1] : part[columnsExport[i].equal[2]]);
-		            }
+						else if(columnsExport[i].addNoDecimal) {
+					  		newData.push(parseFloat(part[columnsExport[i].addNoDecimal[0]]) + parseFloat(part[columnsExport[i].addNoDecimal[1]]));
+						}
 
-		            else if(columnsExport[i].addNoDecimal) {
-		              newData.push(parseFloat(part[columnsExport[i].addNoDecimal[0]]) + parseFloat(part[columnsExport[i].addNoDecimal[1]]));
-		            }
+						else if(columnsExport[i].add) {
+					  		newData.push((parseFloat(part[columnsExport[i].add[0]]) + parseFloat(part[columnsExport[i].add[1]])).toFixed(2));
+						}
 
-		            else if(columnsExport[i].add) {
-		              newData.push((parseFloat(part[columnsExport[i].add[0]]) + parseFloat(part[columnsExport[i].add[1]])).toFixed(2));
-		            }
+						else if(columnsExport[i].subtract) {
+					  		newData.push((parseFloat(part[columnsExport[i].subtract[0]]) - parseFloat(part[columnsExport[i].subtract[1]])).toFixed(2));
+						}
 
-		            else if(columnsExport[i].subtract) {
-		              newData.push((parseFloat(part[columnsExport[i].subtract[0]]) - parseFloat(part[columnsExport[i].subtract[1]])).toFixed(2));
-		            }
+						else if(columnsExport[i].equalOrMayor) {
+					  		newData.push(theArray[index][columnsExport[i].column] == columnsExport[i].equalOrMayor[0][0] || theArray[index][columnsExport[i].column] > columnsExport[i].equalOrMayor[0][1] ? columnsExport[i].equalOrMayor[1] : part[columnsExport[i].equalOrMayor[2]]);
+						}
 
-		            else if(columnsExport[i].equalOrMayor) {
-		              newData.push(theArray[index][columnsExport[i].column] == columnsExport[i].equalOrMayor[0][0] || theArray[index][columnsExport[i].column] > columnsExport[i].equalOrMayor[0][1] ? columnsExport[i].equalOrMayor[1] : part[columnsExport[i].equalOrMayor[2]]);
-		            }
+						else if(columnsExport[i].condition) {
+					  		newData.push(theArray[index][columnsExport[i].column] == columnsExport[i].condition[0] ? columnsExport[i].condition[1] : columnsExport[i].condition[2]);
+						}else if(columnsExport[i].join) {
+							var separator = ' ';
+							if(columnsExport[i].separator) {
+								separator = columnsExport[i].separator;
+							}
+							var aaaaa = theArray[index][columnsExport[i].column];
+							for(var j=0; j<columnsExport[i].join.length; j++) {
+								if(columnsExport[i].join.length == 1 || j != (columnsExport[i].join.length)) {
+									if(theArray[index][columnsExport[i].join[j]]) {
+										aaaaa+=separator;
+									}
+								}
 
-		            else if(columnsExport[i].condition) {
-		              newData.push(theArray[index][columnsExport[i].column] == columnsExport[i].condition[0] ? columnsExport[i].condition[1] : columnsExport[i].condition[2]);
-		            }else if(columnsExport[i].join) {
-		              var separator = ' ';
-		              if(columnsExport[i].separator) {
-		                separator = columnsExport[i].separator;
-		              }
-		              var aaaaa = theArray[index][columnsExport[i].column];
-		              for(var j=0; j<columnsExport[i].join.length; j++) {
-		                if(columnsExport[i].join.length == 1 || j != (columnsExport[i].join.length)) {
-		                  
-		                  if(theArray[index][columnsExport[i].join[j]]) {
-		                    aaaaa+=separator;
-		                  }
-		                }
-		                
-		                if(theArray[index][columnsExport[i].join[j]]) {
-		                  aaaaa+=theArray[index][columnsExport[i].join[j]];  
-		                }
-		              }
-		              newData.push(aaaaa);
-		              //newData.push(theArray[index][columnsExport[i].column]+separator+theArray[index][columnsExport[i].join]);
-		            }else {
-		              newData.push(theArray[index][columnsExport[i].column]);  
-		            } 
-		          } 
-		        }                
-		          delete theArray[index];
-		          theArray[index] = newData;
+								if(theArray[index][columnsExport[i].join[j]]) {
+							  		aaaaa+=theArray[index][columnsExport[i].join[j]];  
+								}
+							}
+							newData.push(aaaaa);
+							//newData.push(theArray[index][columnsExport[i].column]+separator+theArray[index][columnsExport[i].join]);
+						}else {
+							//newData.push(theArray[index][columnsExport[i].column]);
+
+							var split = columnsExport[i].column.split('.');
+							var act = theArray[index];
+
+							split.forEach(function(c) {
+								act = act[c];
+							});
+
+							newData.push(act);					  
+						} 
+		          	} 
+		        }
+
+	            delete theArray[index];
+	            theArray[index] = newData;
 	        });
 	      	
 	      	return {body: jsonResult.responseJSON.data, header: $("#"+tableId+" thead tr th.col-export").map(function() { return this.innerHTML; }).get()};
@@ -849,6 +857,10 @@ $(document).on('click', '#edit', function(e) {
         data: {},
         success: function(data) {
       		if(data) {
+      			if(typeof customizeEdit == 'function') {
+      				customizeEdit(data);
+      			}
+
       			$('#modalEdit').find('form').find(":input").each(function(v) {
       				var type = $(this).attr('type');
       				var name = $(this).attr('name');

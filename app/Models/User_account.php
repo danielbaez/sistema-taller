@@ -12,6 +12,10 @@ class User_account extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['user_id', 'role_id', 'branch_id', 'status'];
+
+    protected $appends = ['status_name'];
+
     public function user()
     {
     	return $this->belongsTo(User::class);
@@ -24,7 +28,16 @@ class User_account extends Model
 
     public function branch()
     {
-    	return $this->belongsTo(Branch::class);
+        $attributes = [];
+
+        $branch = new Branch();
+
+        foreach($branch->getFillable() as $attribute)
+        {
+            $attributes[$attribute] = ''; 
+        }
+
+        return $this->belongsTo(Branch::class)->withDefault($attributes);
     }
 
     public function scopeActive($query)
@@ -46,5 +59,14 @@ class User_account extends Model
     {
         //return $this->status == config('system.status.1') ? 1 : 0;
         return $this->status == 1 ? 1 : 0;
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->status = 1;
+        });
     }
 }

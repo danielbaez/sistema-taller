@@ -33,5 +33,11 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'users.edit', 'description' => 'Editar Usuario', 'status' => 1])->syncRoles([$role1->id]);
         Permission::create(['name' => 'users.destroy', 'description' => 'Eliminar Usuario', 'status' => 1])->syncRoles([$role1->id]);
         Permission::create(['name' => 'users.activate', 'description' => 'Activar Usuario', 'status' => 1])->syncRoles([$role1->id, $role3->id]);
+
+        Permission::create(['name' => 'userAccounts.index', 'description' => 'Ver Roles de Usuarios', 'status' => 1])->syncRoles([$role1->id]);
+        Permission::create(['name' => 'userAccounts.create', 'description' => 'Crear Rol de Usuario', 'status' => 1])->syncRoles([$role1->id]);
+        Permission::create(['name' => 'userAccounts.edit', 'description' => 'Editar Rol de Usuario', 'status' => 1])->syncRoles([$role1->id]);
+        Permission::create(['name' => 'userAccounts.destroy', 'description' => 'Eliminar Rol de Usuario', 'status' => 1])->syncRoles([$role1->id]);
+        Permission::create(['name' => 'userAccounts.activate', 'description' => 'Activar Rol de Usuario', 'status' => 1])->syncRoles([$role1->id]);
     }
 }

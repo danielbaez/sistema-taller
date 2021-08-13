@@ -47,6 +47,7 @@ Route::middleware(['auth', 'checkStatus', 'user.menu'])->group(function () {
         Route::resource('/usuarios', UsersController::class, ['names' => 'users'])->parameters(['usuarios' => 'user']);
         Route::resource('/perfiles', ProfilesController::class, ['names' => 'profiles'])->parameters(['perfiles' => 'profile']);
         Route::resource('/roles', RolesController::class, ['names' => 'roles'])->parameters(['roles' => 'role']);
+        Route::resource('/roles-usuarios', UserAccountsController::class, ['names' => 'userAccounts'])->parameters(['roles-usuarios' => 'userAccount']);
     });
 });
 

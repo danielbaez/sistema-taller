@@ -188,42 +188,6 @@ class UsersController extends Controller
      */
     public function destroy(Request $request, User $user)
     {
-        $status = !empty($request->get('status')) ? $request->get('status') : 0;
-        
-        $status_success = $status == 1 ? 'activado' : 'desactivado';
-
-        $status_error = $status == 1 ? 'activar' : 'desactivar';
-
-        DB::beginTransaction();
-
-        try {
-            $user->status = !empty($request->get('status')) ? $request->get('status') : 0;
-            $user->save();
-
-            logsStore("Se ha $status_success el usuario $user->name - id: $user->id", 1);
-
-            DB::commit();
-
-            $success = true;
-        } catch (\Exception $e) {
-            DB::rollback();
-            
-            logsStore("Error al $status_error el usuario - id: $user->id", 0, $e);
-
-            $success = false;
-        }
-
-        if($success)
-        {
-            $message = "¡Se ha $status_success el usuario correctamente!";
-        }
-        else
-        {
-            $message = "¡Error al $status_error el usuario!";
-        }
-
-        //$request->session()->flash('message', [$success, $message]);
-
-        return response()->json(['success' => $success, 'message' => $message]);
+        return destroyGeneric($request, $user, 'el usuario '.$user->name);
     }
 }

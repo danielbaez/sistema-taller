@@ -46,7 +46,21 @@ class UserMenu
                     'url'         => route('users.index'),
                     'icon'        => 'far fa-fw fa-user',
                     'label_color' => 'success',
-                    'permission'  => ['users.index', 'users.create']
+                    'permission'  => ['users.index', 'users.create'],
+                    'submenu' => [
+                        [
+                            'text'        => 'Usuarios',
+                            'url'         => route('users.index'),
+                            'label_color' => 'success',
+                            'permission'  => ['users.index', 'users.create']
+                        ],
+                        [
+                            'text'        => 'Roles',
+                            'url'         => route('userAccounts.index'),
+                            'label_color' => 'success',
+                            'permission'  => ['userAccounts.index', 'userAccounts.create']
+                        ]
+                    ]
                 ],
                 [
                     'text'        => 'Roles',

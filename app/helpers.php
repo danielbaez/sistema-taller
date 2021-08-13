@@ -132,3 +132,47 @@ if(!function_exists('hasAnyPermission'))
         return true;
     }
 }
+
+if(!function_exists('destroyGeneric'))
+{
+    function destroyGeneric($request, $model, $title)
+    {
+        $status = !empty($request->get('status')) ? $request->get('status') : 0;
+        
+        $status_success = $status == 1 ? 'activado' : 'desactivado';
+
+        $status_error = $status == 1 ? 'activar' : 'desactivar';
+
+        DB::beginTransaction();
+
+        try {
+            $model->status = !empty($request->get('status')) ? $request->get('status') : 0;
+            $model->save();
+
+            logsStore("Se ha $status_success $title - id: $model->id", 1);
+
+            DB::commit();
+
+            $success = true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            
+            logsStore("Error al $status_error $title - id: $model->id", 0, $e);
+
+            $success = false;
+        }
+
+        if($success)
+        {
+            $message = "¡Se ha $status_success $title correctamente!";
+        }
+        else
+        {
+            $message = "¡Error al $status_error $title!";
+        }
+
+        //$request->session()->flash('message', [$success, $message]);
+
+        return response()->json(['success' => $success, 'message' => $message]);
+    }
+}
