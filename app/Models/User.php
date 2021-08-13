@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\Branch;
 use App\Models\Role;
-use App\Models\User_account;
+use App\Models\UserAccount;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -54,7 +54,7 @@ class User extends Authenticatable
 
     public function adminlte_desc()
     {
-        return Role::find(session('role_id'))->name ?? '';
+        return Role::find(session('roleId'))->name ?? '';
     }
 
     public function adminlte_profile_url()
@@ -64,7 +64,7 @@ class User extends Authenticatable
 
     public function user_accounts()
     {
-        return $this->hasMany(User_account::class);
+        return $this->hasMany(UserAccount::class);
     }
 
     public function getStatusNameAttribute()

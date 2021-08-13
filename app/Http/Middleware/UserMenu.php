@@ -19,19 +19,19 @@ class UserMenu
     {
         if($request->route()->getName() == 'rolesList')
         {
-            if(Session::has('role_id'))
+            if(Session::has('roleId'))
             {
                 logsStore("Sale del perfil", 1);
             }
 
-            Session::forget('user_account_id');
-            Session::forget('role_id');
-            Session::forget('branch_id');
+            Session::forget('userAccountId');
+            Session::forget('roleId');
+            Session::forget('branchId');
         }
 
         $menu = [];
 
-        if(Session::has('role_id'))
+        if(Session::has('roleId'))
         {
             $menu = [
                 [

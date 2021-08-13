@@ -39,7 +39,7 @@ class RolesController extends Controller
         }
 
         $title = 'Roles';
-        $title_form = 'Rol';
+        $titleForm = 'Rol';
 
         $columns = [
             ['title' => '#', 'data' => 'id', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
@@ -54,7 +54,7 @@ class RolesController extends Controller
 
         $permissions = Permission::all();
 
-        return view($resource.'.index', compact('title', 'title_form', 'columns', 'resource', 'permissions'));
+        return view($resource.'.index', compact('title', 'titleForm', 'columns', 'resource', 'permissions'));
     }
 
     /**

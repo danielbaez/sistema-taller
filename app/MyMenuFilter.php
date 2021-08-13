@@ -11,7 +11,7 @@ class MyMenuFilter implements FilterInterface
     {
         if(!empty($item['permission']))
         {
-            $role = Role::find(session('role_id'));
+            $role = Role::find(session('roleId'));
         
             if(!$role->hasAnyPermission($item['permission']))
             {

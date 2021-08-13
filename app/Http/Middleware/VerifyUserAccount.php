@@ -5,10 +5,10 @@ namespace App\Http\Middleware;
 use Closure;
 use App\Models\Role;
 use Illuminate\Http\Request;
-use App\Models\User_account;
+use App\Models\UserAccount;
 use Illuminate\Support\Facades\Session;
 
-class UserAccount
+class VerifyUserAccount
 {
     /**
      * Handle an incoming request.
@@ -21,17 +21,17 @@ class UserAccount
     {
         $pass = false;
 
-        $role_id = Session::has('role_id') ? Session::get('role_id') : false;
+        $roleId = Session::has('roleId') ? Session::get('roleId') : false;
 
-        if($role_id)
+        if($roleId)
         {
-            $role = Role::where('id', $role_id)->where('status', 1)->first();
+            $role = Role::where('id', $roleId)->where('status', 1)->first();
 
             if($role)
             {
-                $user_account = User_account::where('user_id', auth()->user()->id)->where('role_id', $role_id)->where('status', 1)->first();
+                $userAccount = UserAccount::where('user_id', auth()->user()->id)->where('role_id', $roleId)->where('status', 1)->first();
 
-                if($user_account)
+                if($userAccount)
                 {
                     $pass = true;                
                 }          

@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Role;
-use App\Models\User_account;
+use App\Models\UserAccount;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\LogsController;
 use Illuminate\Support\Facades\Route;
@@ -18,11 +18,11 @@ if(!function_exists('currentRole'))
 {
     function currentRole()
     {
-    	if(Session::has('role_id'))
+    	if(Session::has('roleId'))
     	{
-    		return Role::find(session('role_id'));
+    		return Role::find(session('roleId'));
     	}
-        /*User_account::where('user_id', Auth::user()->id)
+        /*UserAccount::where('user_id', Auth::user()->id)
         ->with(['role', 'branch'])->get()*/
     }
 }
@@ -31,7 +31,7 @@ if(!function_exists('currentUserAccounts'))
 {
     function currentUserAccounts()
     {
-    	return User_account::whereHas('role', function($q) {
+    	return UserAccount::whereHas('role', function($q) {
             $q->where('roles.status', 1);
         })->where('user_id', Auth::user()->id)
         ->active()
@@ -51,14 +51,14 @@ if(!function_exists('logsStore'))
 
 if(!function_exists('userPermissions'))
 {
-    function userPermissions($instance, $permissions = [], $default_permissions = true, $resource = '')
+    function userPermissions($instance, $permissions = [], $defaultPermissions = true, $resource = '')
     {
         if(!$resource)
         {
             $resource = explode(".", Route::currentRouteName())[0];
         }
 
-        if($default_permissions)
+        if($defaultPermissions)
         {
             /*$instance->middleware(function ($request, $next) use ($resource) {
                 $action_method = $request->route()->getActionMethod();
@@ -107,7 +107,7 @@ if(!function_exists('hasAllPermissions'))
 {
     function hasAllPermissions($permission)
     {
-        $role = Role::find(session('role_id'));
+        $role = Role::find(session('roleId'));
         
         if(!$role->hasAllPermissions($permission))
         {
@@ -122,7 +122,7 @@ if(!function_exists('hasAnyPermission'))
 {
     function hasAnyPermission($permission)
     {
-        $role = Role::find(session('role_id'));
+        $role = Role::find(session('roleId'));
         
         if(!$role->hasAnyPermission($permission))
         {
@@ -139,9 +139,9 @@ if(!function_exists('destroyGeneric'))
     {
         $status = !empty($request->get('status')) ? $request->get('status') : 0;
         
-        $status_success = $status == 1 ? 'activado' : 'desactivado';
+        $statusSuccess = $status == 1 ? 'activado' : 'desactivado';
 
-        $status_error = $status == 1 ? 'activar' : 'desactivar';
+        $statusError = $status == 1 ? 'activar' : 'desactivar';
 
         DB::beginTransaction();
 
@@ -149,7 +149,7 @@ if(!function_exists('destroyGeneric'))
             $model->status = !empty($request->get('status')) ? $request->get('status') : 0;
             $model->save();
 
-            logsStore("Se ha $status_success $title - id: $model->id", 1);
+            logsStore("Se ha $statusSuccess $title - id: $model->id", 1);
 
             DB::commit();
 
@@ -157,18 +157,18 @@ if(!function_exists('destroyGeneric'))
         } catch (\Exception $e) {
             DB::rollback();
             
-            logsStore("Error al $status_error $title - id: $model->id", 0, $e);
+            logsStore("Error al $statusError $title - id: $model->id", 0, $e);
 
             $success = false;
         }
 
         if($success)
         {
-            $message = "¡Se ha $status_success $title correctamente!";
+            $message = "¡Se ha $statusSuccess $title correctamente!";
         }
         else
         {
-            $message = "¡Error al $status_error $title!";
+            $message = "¡Error al $statusError $title!";
         }
 
         //$request->session()->flash('message', [$success, $message]);

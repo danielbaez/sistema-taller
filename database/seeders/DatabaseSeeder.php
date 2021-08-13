@@ -6,7 +6,7 @@ use App\Models\Log;
 use App\Models\User;
 use App\Models\Branch;
 use App\Models\Role;
-use App\Models\User_account;
+use App\Models\UserAccount;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -25,13 +25,13 @@ class DatabaseSeeder extends Seeder
         User::factory()
         ->create(['username' => 'daniel', 'name' => 'Daniel Baez', 'email' => 'daniel@gmail.com', 'status' => 1])
         ->each(function($user) {
-        	$this->add_user_accounts(3, $user);
+        	$this->addUserAccount(3, $user);
         });
 
         User::factory(10)
         ->create()
         ->each(function($user) {
-        	$this->add_user_accounts(3, $user);
+        	$this->addUserAccount(3, $user);
         });
 
         /*Log::create([
@@ -44,13 +44,13 @@ class DatabaseSeeder extends Seeder
         ]);*/
     }
 
-    public function add_user_accounts($number, $user)
+    public function addUserAccount($number, $user)
     {
-    	$user_account = User_account::factory($number)->make(['user_id' => $user->id]);
+    	$userAccount = UserAccount::factory($number)->make(['user_id' => $user->id]);
 
-    	foreach($user_account as $key => $value)
+    	foreach($userAccount as $key => $value)
     	{
-    		$count = User_account::where('user_id', $value->user_id)
+    		$count = UserAccount::where('user_id', $value->user_id)
         	->where('role_id', $value->role_id)
         	->where('branch_id', $value->branch_id)
         	->count();
@@ -60,9 +60,9 @@ class DatabaseSeeder extends Seeder
                 /*$data = $value->toArray();
                 $data['status'] = array_search($value->status, config('system.status'), true);
 
-        		User_account::create($data);*/
+        		UserAccount::create($data);*/
 
-                User_account::create($value->getAttributes());	
+                UserAccount::create($value->getAttributes());	
         	}	
     	}
     }

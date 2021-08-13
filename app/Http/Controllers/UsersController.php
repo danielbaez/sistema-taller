@@ -35,7 +35,7 @@ class UsersController extends Controller
         }
 
         $title = 'Usuarios';
-        $title_form = 'Usuario';
+        $titleForm = 'Usuario';
 
         $columns = [
             ['title' => '#', 'data' => 'id', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
@@ -50,7 +50,7 @@ class UsersController extends Controller
 
         $roles = Role::all();
 
-        return view($resource.'.index', compact('title', 'title_form', 'columns', 'resource', 'roles'));
+        return view($resource.'.index', compact('title', 'titleForm', 'columns', 'resource', 'roles'));
     }
 
     /**

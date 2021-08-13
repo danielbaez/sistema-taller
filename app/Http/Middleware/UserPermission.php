@@ -17,7 +17,7 @@ class UserPermission
      */
     public function handle(Request $request, Closure $next, $permission)
     {
-        $role = Role::find(session('role_id'));
+        $role = Role::find(session('roleId'));
 
         $p = explode('|', $permission);
 

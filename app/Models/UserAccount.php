@@ -8,7 +8,7 @@ use App\Models\Role;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class User_account extends Model
+class UserAccount extends Model
 {
     use HasFactory;
 

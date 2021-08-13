@@ -91,7 +91,7 @@ class Role extends Model
 
     public function user_accounts()
     {
-        return $this->hasMany(User_account::class);
+        return $this->hasMany(UserAccount::class);
     }
 
     /*public function getStatusAttribute($value)

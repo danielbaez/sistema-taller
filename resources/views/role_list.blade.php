@@ -18,15 +18,15 @@
 					</tr>
 				</thead>
 				<tbody class="text-center">
-					@foreach($user_accounts as $user_account)
+					@foreach($usersAccounts as $userAccount)
 						<tr>
-							<th scope="row">{{ $user_account->id }}</th>
-							<td>{{ $user_account->role->name }}</td>
-							<td>{{ $user_account->role_id == 2 ? $user_account->branch->name : '---' }}</td>
-							<td>{{ $user_account->status }}</td>
+							<th scope="row">{{ $userAccount->id }}</th>
+							<td>{{ $userAccount->role->name }}</td>
+							<td>{{ $userAccount->role_id == 2 ? $userAccount->branch->name : '---' }}</td>
+							<td>{{ $userAccount->status }}</td>
 							<td>
-								@if($user_account->status == 'Activo')
-									<a href="{{ route('enterRole', ['user_account_id' => $user_account->id]) }}" class="btn btn-primary">Ingresar</a>
+								@if($userAccount->status == 'Activo')
+									<a href="{{ route('enterRole', ['userAccountId' => $userAccount->id]) }}" class="btn btn-primary">Ingresar</a>
 								@endif
 							</td>
 						</tr>
@@ -66,15 +66,15 @@
 					</tr>
 				</thead>
 				<tbody class="text-center">
-					@foreach($user_accounts as $user_account)
+					@foreach($usersAccounts as $userAccount)
 						<tr>
-							<th scope="row">{{ $user_account->id }}</th>
-							<td>{{ $user_account->role->name }}</td>
-							<td>{{ $user_account->role_id == 2 ? $user_account->branch->name : '---' }}</td>
-							<td>{{ $user_account->status_name }}</td>
+							<th scope="row">{{ $userAccount->id }}</th>
+							<td>{{ $userAccount->role->name }}</td>
+							<td>{{ $userAccount->role_id == 2 ? $userAccount->branch->name : '---' }}</td>
+							<td>{{ $userAccount->status_name }}</td>
 							<td>
-								@if($user_account->role->status === 1 && $user_account->is_active)
-									<a href="{{ route('enterRole', ['user_account_id' => $user_account->id]) }}" class="btn btn-primary">Ingresar</a>
+								@if($userAccount->role->status === 1 && $userAccount->is_active)
+									<a href="{{ route('enterRole', ['userAccountId' => $userAccount->id]) }}" class="btn btn-primary">Ingresar</a>
 								@else
 									Rol desactivado
 								@endif

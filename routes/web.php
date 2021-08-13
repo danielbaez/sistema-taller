@@ -3,8 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProfilesController;
-use App\Http\Controllers\UserAccountsController;
+use App\Http\Controllers\UsersAccountsController;
 use App\Http\Controllers\RolesController;
 
 /*
@@ -26,28 +25,15 @@ Auth::routes(['register' => true, 'reset' => false, 'confirm' => false, 'verify'
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-/*Route::middleware(['auth', 'user.menu'])->group(function () {
-    Route::get('/profilesList', [UserAccountsController::class, 'profilesList'])->name('profilesList');
-    Route::get('/enterProfile/{user_account_id}', [UserAccountsController::class, 'enterProfile'])->name('enterProfile');
-
-    Route::middleware(['user.account'])->group(function () {
-        Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
-        Route::resource('/usuarios', UsersController::class, ['names' => 'users'])->parameters(['usuarios' => 'user']);
-        Route::resource('/perfiles', ProfilesController::class, ['names' => 'profiles'])->parameters(['perfiles' => 'profile']);
-        Route::resource('/roles', RolesController::class, ['names' => 'roles'])->parameters(['roles' => 'role']);
-    });
-});*/
-
 Route::middleware(['auth', 'checkStatus', 'user.menu'])->group(function () {
-    Route::get('/rolesList', [UserAccountsController::class, 'rolesList'])->name('rolesList');
-    Route::get('/enterRole/{user_account_id}', [UserAccountsController::class, 'enterRole'])->name('enterRole');
+    Route::get('/rolesList', [UsersAccountsController::class, 'rolesList'])->name('rolesList');
+    Route::get('/enterRole/{userAccountId}', [UsersAccountsController::class, 'enterRole'])->name('enterRole');
 
-    Route::middleware(['user.account'])->group(function () {
+    Route::middleware(['verify.user.account'])->group(function () {
         Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
         Route::resource('/usuarios', UsersController::class, ['names' => 'users'])->parameters(['usuarios' => 'user']);
-        Route::resource('/perfiles', ProfilesController::class, ['names' => 'profiles'])->parameters(['perfiles' => 'profile']);
         Route::resource('/roles', RolesController::class, ['names' => 'roles'])->parameters(['roles' => 'role']);
-        Route::resource('/roles-usuarios', UserAccountsController::class, ['names' => 'userAccounts'])->parameters(['roles-usuarios' => 'userAccount']);
+        Route::resource('/roles-usuarios', UsersAccountsController::class, ['names' => 'userAccounts'])->parameters(['roles-usuarios' => 'userAccount']);
     });
 });
 

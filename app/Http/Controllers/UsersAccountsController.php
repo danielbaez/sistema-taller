@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User_account;
+use App\Models\UserAccount;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Branch;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Session;
 use App\Http\Requests\UserAccountRequest;
 use Illuminate\Support\Facades\DB;
 
-class UserAccountsController extends Controller
+class UsersAccountsController extends Controller
 {
     public function __construct()
     {
@@ -26,7 +26,7 @@ class UserAccountsController extends Controller
 
         if($request->ajax())
         {
-            $data = User_account::with('user')->with('role')->with('branch')->orderBy('id', 'desc')->get();
+            $data = UserAccount::with('user')->with('role')->with('branch')->orderBy('id', 'desc')->get();
             return Datatables::of($data)
                 //->addIndexColumn()
                 ->filter(function ($query) use ($request) {
@@ -43,7 +43,7 @@ class UserAccountsController extends Controller
         }
 
         $title = 'Roles de Usuarios';
-        $title_form = 'Rol de Usuario';
+        $titleForm = 'Rol de Usuario';
 
         $columns = [
             ['title' => '#', 'data' => 'id', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
@@ -62,7 +62,7 @@ class UserAccountsController extends Controller
         $roles = Role::all();
         $branches = Branch::all();
 
-        return view($resource.'.index', compact('title', 'title_form', 'columns', 'resource', 'users', 'roles', 'branches'));
+        return view($resource.'.index', compact('title', 'titleForm', 'columns', 'resource', 'users', 'roles', 'branches'));
     }
 
     public function store(UserAccountRequest $request)
@@ -70,7 +70,7 @@ class UserAccountsController extends Controller
         DB::beginTransaction();
 
         try {
-            $userAccount = User_account::create($request->all());
+            $userAccount = UserAccount::create($request->all());
 
             logsStore("Se ha creado el rol de usuario - id: $userAccount->id", 1);
 
@@ -103,7 +103,7 @@ class UserAccountsController extends Controller
 
     public function show($id)
     {
-        return User_account::with('user')
+        return UserAccount::with('user')
         ->with('role')
         ->with('branch')
         ->orderBy('id', 'desc')
@@ -111,7 +111,7 @@ class UserAccountsController extends Controller
         ->first();
     }
 
-    public function update(UserAccountRequest $request, User_account $userAccount)
+    public function update(UserAccountRequest $request, UserAccount $userAccount)
     {
         DB::beginTransaction();
 
@@ -145,17 +145,17 @@ class UserAccountsController extends Controller
         return response()->json(['success' => $success, 'message' => $message]);
     }
 
-    public function destroy(Request $request, User_account $userAccount)
+    public function destroy(Request $request, UserAccount $userAccount)
     {
         return destroyGeneric($request, $userAccount, 'el rol de usuario');
     }
 
     public function rolesList(Request $request)
     {
-        $user_accounts = User_account::where('user_id', Auth::user()->id)
+        $usersAccounts = UserAccount::where('user_id', Auth::user()->id)
         ->with(['role', 'branch'])->get();
 
-        $count = $user_accounts->countBy(function ($item) {
+        $count = $usersAccounts->countBy(function ($item) {
             return $item->role->status == 1 && $item['status'] == 1 ? 1 : 0;
         })->toArray();
 
@@ -163,10 +163,10 @@ class UserAccountsController extends Controller
 
         if(array_key_exists($status, $count) && $count[$status] == 1)
         {
-            foreach ($user_accounts as $key => $value) {
+            foreach ($usersAccounts as $key => $value) {
                 if($value->status == 1 && $value->role->status == 1)
                 {
-                    return redirect()->route('enterRole', ['user_account_id' => $value->id]);
+                    return redirect()->route('enterRole', ['userAccountId' => $value->id]);
                 }
             }
         }
@@ -175,20 +175,20 @@ class UserAccountsController extends Controller
         //config(['adminlte.classes_sidebar' => 'd-none']);
         //config(['adminlte.classes_content_wrapper' => 'm-0']);
 
-        return view('role_list', compact('user_accounts'));
+        return view('role_list', compact('usersAccounts'));
     }
 
-    public function enterRole(Request $request, $user_account_id)
+    public function enterRole(Request $request, $userAccountId)
     {
-    	$user_account = User_account::whereId($user_account_id)
+    	$user_account = UserAccount::whereId($userAccountId)
         ->active()
     	->first();
 
     	if($user_account)
     	{
-            $request->session()->put('user_account_id', $user_account->id);
-    		$request->session()->put('role_id', $user_account->role_id);
-            $request->session()->put('branch_id', $user_account->branch_id);
+            $request->session()->put('userAccountId', $user_account->id);
+    		$request->session()->put('roleId', $user_account->role_id);
+            $request->session()->put('branchId', $user_account->branch_id);
 
             logsStore("Ingresa con el perfil", 1);
 
