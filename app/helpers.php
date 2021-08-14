@@ -204,3 +204,38 @@ if(!function_exists('destroyGeneric'))
         return response()->json(['success' => $success, 'message' => $message]);
     }
 }
+
+if(!function_exists('datatablesGeneric'))
+{
+    function datatablesGeneric($data, $request, $resource)
+    {
+        return datatables()->of($data)
+        //->addIndexColumn()
+        ->filter(function ($query) use ($request) {
+            if($request->get('aaa')) {
+                $query->where('id', 'like', "%" . $request->get('aaa') . "%");
+            }
+        }, true)
+        ->addColumn('action', function($row) use ($resource) {
+            $btn = view('partials.options', compact('row', 'resource'))->render();
+            return $btn;
+        })
+        ->rawColumns(['action'])
+        ->make(true);
+    }
+}
+
+if(!function_exists('permissionsToShowActionButton'))
+{
+    function permissionsToShowActionButton($resource)
+    {
+        $columns = [];
+
+        if(hasAnyPermission([$resource.'.edit', $resource.'.destroy', $resource.'.activate']))
+        {
+            $columns[] = ['title' => 'Acción', 'data' => 'action', 'export' => 'false', 'orderable' => 'false', 'searchable' => 'false'];
+        }
+
+        return $columns;
+    }
+}

@@ -6,7 +6,6 @@ use App\Models\UserAccount;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Branch;
-use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -31,19 +30,8 @@ class UsersAccountsController extends Controller
         if($request->ajax())
         {
             $data = UserAccount::with('user')->with('role')->with('branch')->orderBy('id', 'desc')->get();
-            return Datatables::of($data)
-                //->addIndexColumn()
-                ->filter(function ($query) use ($request) {
-                    if($request->get('aaa')) {
-                        $query->where('id', 'like', "%" . $request->get('aaa') . "%");
-                    }
-                }, true)
-                ->addColumn('action', function($row) use ($resource) {
-                    $btn = view('partials.options', compact('row', 'resource'))->render();
-                    return $btn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+
+            return datatablesGeneric($data, $request, $resource);
         }
 
         $title = $this->title;
@@ -57,10 +45,7 @@ class UsersAccountsController extends Controller
             ['title' => 'Estado', 'data' => 'status_name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true']
         ];
 
-        if(hasAnyPermission([$resource.'.edit', $resource.'.destroy', $resource.'.activate']))
-        {
-            $columns[] = ['title' => 'Acción', 'data' => 'action', 'export' => 'false', 'orderable' => 'false', 'searchable' => 'false'];
-        }
+        $columns = array_filter(array_merge($columns, permissionsToShowActionButton($resource)));
 
         $users = User::all();
         $roles = Role::all();

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Requests\RoleRequest;
-use DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Models\Role;
 use App\Http\Requests\UserRequest;
@@ -29,13 +28,8 @@ class UsersController extends Controller
         if($request->ajax())
         {
             $data = User::orderBy('id', 'desc')->get();
-            return Datatables::of($data)
-                ->addColumn('action', function($row) use ($resource) {
-                    $btn = view('partials.options', compact('row', 'resource'))->render();
-                    return $btn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+
+            return datatablesGeneric($data, $request, $resource);
         }
 
         $title = $this->title;
@@ -47,10 +41,7 @@ class UsersController extends Controller
             ['title' => 'Estado', 'data' => 'status_name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true']
         ];
 
-        if(hasAnyPermission([$resource.'.edit', $resource.'.destroy', $resource.'.activate']))
-        {
-            $columns[] = ['title' => 'Acción', 'data' => 'action', 'export' => 'false', 'orderable' => 'false', 'searchable' => 'false'];
-        }
+        $columns = array_filter(array_merge($columns, permissionsToShowActionButton($resource)));
 
         $roles = Role::all();
 

@@ -71,9 +71,10 @@ class UserMenu
                 ],
                 [
                     'text'        => 'Sucursales',
-                    'url'         => 'products',
+                    'url'         => route('branches.index'),
                     'icon'        => 'far fa-fw fa-building',
-                    'label_color' => 'success'
+                    'label_color' => 'success',
+                    'permission'  => ['branches.index', 'branches.create']
                 ],
                 [
                     'text'        => 'Empleados',
