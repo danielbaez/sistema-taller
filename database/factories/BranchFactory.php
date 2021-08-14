@@ -23,11 +23,9 @@ class BranchFactory extends Factory
     {
         return [
             'name' => $this->faker->unique()->name,
-            'document_type' => 'RUC',
             'document_number' => $this->faker->numberBetween(10000000000, 99999999999),
             'address' => $this->faker->address,
             'phone' => $this->faker->phoneNumber,
-            'representative' => $this->faker->name,
             'status' => $this->faker->randomElement([0, 1])
         ];
     }

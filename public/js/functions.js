@@ -574,21 +574,34 @@ function dataTableServerSide(tableId, tableColumns, fileName, titleFile, orienta
 	            //'copyHtml5',
 	            //'csvHtml5',
 	        ]
-    	}
+    	},
+    	preDrawCallback: function( settings ) {
+    		if(settings.iDraw) {
+    			$('.searchBtn').attr('disabled', true);
+    			$('.btn-export').attr('disabled', true);
+    		}
+	    },
+	   	drawCallback: function( settings ) {
+	        $('.searchBtn').attr('disabled', false);
+
+	        if(settings.json.data.length) {
+	        	$('.btn-export').show();
+	        	$('.btn-export').attr('disabled', false);
+	        }else {
+	        	$('.btn-export').hide();
+	        	$('.btn-export').attr('disabled', true);
+	        }
+	    }
     });
 
 	$('.searchBtn').on('click', function() {
-    	$(this).attr("disabled", "disabled");
     	table.search($('.filters .search').val()).draw();
-    	$(this).removeAttr("disabled");
     	$('.search').focus();
     })
 
     $('.search').on('keypress', function (e) {
      	if(e.which === 13){
-            $(this).attr("disabled", "disabled");
             table.search($('.filters .search').val()).draw();
-            $(this).removeAttr("disabled");
             $(this).focus();
         }
     })

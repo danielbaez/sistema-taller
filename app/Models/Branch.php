@@ -10,7 +10,7 @@ class Branch extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'document_type', 'document_number', 'address', 'phone', 'representative', 'status'];
+    protected $fillable = ['name', 'document_number', 'address', 'phone', 'status'];
 
     protected $appends = ['status_name'];
 
@@ -22,5 +22,14 @@ class Branch extends Model
     public function getStatusNameAttribute()
     {
         return config('system.status.'.$this->status);
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->status = 1;
+        });
     }
 }
