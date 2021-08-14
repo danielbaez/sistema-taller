@@ -1,1 +1,1 @@
-<button type="submit" class="btn btn-submit-edit btn-primary m-auto pl-5 pr-5">Editar</button>
+<button type="submit" class="btn btn-submit-edit btn-primary m-auto pl-5 pr-5"><i class="fas fa-check-circle icon-c"></i> Editar</button>

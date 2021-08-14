@@ -942,7 +942,7 @@ $(document).on('click', '#activeOrDesactivate', function(e) {
 	$('#modalActiveOrDesactivate').find('input[name="status"]').val(status);
 	$('#modalActiveOrDesactivate').modal('show');
   	$('#modalActiveOrDesactivate').find('form').attr('action', url_destroy);
-  	$('#modalActiveOrDesactivate').find('.btn-submit-status').text(text_status);
+  	$('#modalActiveOrDesactivate').find('.btn-submit-status span').text(text_status);
 });
 
 $(".modal-form").on("hidden.bs.modal", function () {

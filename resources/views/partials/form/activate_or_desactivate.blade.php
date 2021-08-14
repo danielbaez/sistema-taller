@@ -12,7 +12,7 @@
           <p class="text-center font-weight-bold">¿Está seguro que desea <span class="text-status"></span>?</p>
           <input type="hidden" name="status">
           <div class="modal-footer">
-            <button type="submit" class="btn btn-submit-status btn-primary m-auto pl-5 pr-5"></button>
+            <button type="submit" class="btn btn-submit-status btn-primary m-auto pl-5 pr-5"><i class="fas fa-check-circle icon-c"></i> <span></span></button>
           </div>
         </form>
       </div>
