@@ -56,9 +56,9 @@ class UsersAccountsController extends Controller
 
     public function store(UserAccountRequest $request)
     {
-        DB::beginTransaction();
-
         try {
+            DB::beginTransaction();
+
             $userAccount = UserAccount::create($request->all());
 
             logsStore("store", "$this->titleMessageLog - id: $userAccount->id", 1);
@@ -91,9 +91,9 @@ class UsersAccountsController extends Controller
 
     public function update(UserAccountRequest $request, UserAccount $userAccount)
     {
-        DB::beginTransaction();
-
         try {
+            DB::beginTransaction();
+            
             $userAccount->update($request->all());
 
             logsStore("update", "$this->titleMessageLog - id: $userAccount->id", 1);

@@ -64,9 +64,9 @@ class RolesController extends Controller
      */
     public function store(RoleRequest $request)
     {
-        DB::beginTransaction();
-
         try {
+            DB::beginTransaction();
+
             $role = Role::create($request->all());
 
             $role->syncPermissions($request->permissions);
@@ -124,9 +124,9 @@ class RolesController extends Controller
      */
     public function update(RoleRequest $request, Role $role)
     {
-        DB::beginTransaction();
-
         try {
+            DB::beginTransaction();
+            
             $role->name = $request->get('name');
             $role->save();
 

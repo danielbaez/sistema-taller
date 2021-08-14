@@ -66,9 +66,9 @@ class UsersController extends Controller
      */
     public function store(UserRequest $request)
     {
-        DB::beginTransaction();
-
         try {
+            DB::beginTransaction();
+
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -125,9 +125,9 @@ class UsersController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        DB::beginTransaction();
-
         try {
+            DB::beginTransaction();
+            
             $user->name = $request->get('name');
             $user->email = $request->get('email');
 

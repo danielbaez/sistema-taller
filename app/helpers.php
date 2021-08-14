@@ -180,9 +180,9 @@ if(!function_exists('destroyGeneric'))
 
         $statusError = $status == 1 ? 'activar' : 'desactivar';
 
-        DB::beginTransaction();
-
         try {
+            DB::beginTransaction();
+            
             $model->status = !empty($request->get('status')) ? $request->get('status') : 0;
             $model->save();
 
