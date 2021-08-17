@@ -1,1 +1,1 @@
-<img class="img-fluid image-in-table" src="{{ asset('storage/'.$row->logo) }}" data-toggle="modal" data-target="#modalImage">
+<img class="img-fluid image-in-table" style="width: 120px" src="{{ asset('storage/'.$row->logo) }}" data-toggle="modal" data-target="#modalImage">

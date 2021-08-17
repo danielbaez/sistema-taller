@@ -102,10 +102,11 @@ class ConfigurationsController extends Controller
 
             if($request->file('logo'))
             {
-                $imagePath = $request->file('logo');
+                /*$imagePath = $request->file('logo');
                 $imageName = $imagePath->getClientOriginalName();
                 $fileExtension = $imagePath->getClientOriginalExtension();
-                $fileName = time().$fileExtension;
+                $fileName = time().$fileExtension;*/
+                $fileName = 'logo.png';
 
                 $path = $request->file('logo')->storeAs('uploads', $fileName, 'public');
             }

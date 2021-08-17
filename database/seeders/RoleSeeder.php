@@ -48,5 +48,17 @@ class RoleSeeder extends Seeder
 
         Permission::create(['name' => 'configurations.index', 'description' => 'Ver Configuración', 'status' => 1])->syncRoles([$role1->id]);
         Permission::create(['name' => 'configurations.edit', 'description' => 'Editar Configuración', 'status' => 1])->syncRoles([$role1->id]);
+
+        Permission::create(['name' => 'categories.index', 'description' => 'Ver Categorías', 'status' => 1])->syncRoles([$role1->id]);
+        Permission::create(['name' => 'categories.create', 'description' => 'Crear Categoría', 'status' => 1])->syncRoles([$role1->id]);
+        Permission::create(['name' => 'categories.edit', 'description' => 'Editar Categoría', 'status' => 1])->syncRoles([$role1->id]);
+        Permission::create(['name' => 'categories.destroy', 'description' => 'Eliminar Categoría', 'status' => 1])->syncRoles([$role1->id]);
+        Permission::create(['name' => 'categories.activate', 'description' => 'Activar Categoría', 'status' => 1])->syncRoles([$role1->id]);
+
+        Permission::create(['name' => 'brands.index', 'description' => 'Ver Marcas', 'status' => 1])->syncRoles([$role1->id]);
+        Permission::create(['name' => 'brands.create', 'description' => 'Crear Marca', 'status' => 1])->syncRoles([$role1->id]);
+        Permission::create(['name' => 'brands.edit', 'description' => 'Editar Marca', 'status' => 1])->syncRoles([$role1->id]);
+        Permission::create(['name' => 'brands.destroy', 'description' => 'Eliminar Marca', 'status' => 1])->syncRoles([$role1->id]);
+        Permission::create(['name' => 'brands.activate', 'description' => 'Activar Marca', 'status' => 1])->syncRoles([$role1->id]);
     }
 }

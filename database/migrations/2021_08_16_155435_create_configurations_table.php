@@ -19,7 +19,7 @@ class CreateConfigurationsTable extends Migration
             $table->string('document_number', 20);
             $table->string('address', 100);
             $table->string('phone', 30);
-            $table->string('logo', 20)->nullable();
+            $table->string('logo', 30)->nullable();
         });
     }
 

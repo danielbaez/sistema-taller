@@ -78,15 +78,17 @@ class UserMenu
                 ],
                 [
                     'text'        => 'Categorías',
-                    'url'         => 'products',
+                    'url'         => route('categories.index'),
                     'icon'        => 'fab fa-fw fa-product-hunt',
-                    'label_color' => 'success'
+                    'label_color' => 'success',
+                    'permission'  => ['categories.index', 'categories.create']
                 ],
                 [
                     'text'        => 'Marcas',
-                    'url'         => 'products',
+                    'url'         => route('brands.index'),
                     'icon'        => 'fab fa-fw fa-product-hunt',
-                    'label_color' => 'success'
+                    'label_color' => 'success',
+                    'permission'  => ['brands.index', 'brands.create']
                 ],
                 [
                     'text'        => 'Presentaciones',

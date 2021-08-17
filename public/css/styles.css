@@ -1,3 +1,15 @@
+.brand-link .brand-image {
+	margin: 0 !important;
+	width: 100% !important;
+	border-radius: 0;
+	max-height: 100% !important;
+}
+
+.brand-link .brand-text {
+	display: block !important;
+	clear: both !important;
+}
+
 @media screen and (max-width: 992px) {
 	div.dataTables_wrapper>.row>div[class^="col-"] {
 		/*padding: 0;*/

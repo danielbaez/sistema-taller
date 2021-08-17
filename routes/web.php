@@ -7,6 +7,8 @@ use App\Http\Controllers\UsersAccountsController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\BranchesController;
 use App\Http\Controllers\ConfigurationsController;
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\BrandsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +57,11 @@ Route::middleware(['auth', 'checkStatus', 'user.menu'])->group(function () {
 
         Route::post('/configuracion/{configuration}', [ConfigurationsController::class, 'update'])->name('configurations.update');
 
+        Route::resource('/categorias', CategoriesController::class, ['names' => 'categories'])
+        ->parameters(['categorias' => 'category']);
+
+        Route::resource('/marcas', BrandsController::class, ['names' => 'brands'])
+        ->parameters(['marcas' => 'brand']);
     });
 });
 
