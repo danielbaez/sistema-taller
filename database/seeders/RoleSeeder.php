@@ -45,5 +45,8 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'branches.edit', 'description' => 'Editar Sucursal', 'status' => 1])->syncRoles([$role1->id]);
         Permission::create(['name' => 'branches.destroy', 'description' => 'Eliminar Sucursal', 'status' => 1])->syncRoles([$role1->id]);
         Permission::create(['name' => 'branches.activate', 'description' => 'Activar Sucursal', 'status' => 1])->syncRoles([$role1->id]);
+
+        Permission::create(['name' => 'configurations.index', 'description' => 'Ver Configuración', 'status' => 1])->syncRoles([$role1->id]);
+        Permission::create(['name' => 'configurations.edit', 'description' => 'Editar Configuración', 'status' => 1])->syncRoles([$role1->id]);
     }
 }

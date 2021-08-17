@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UsersAccountsController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\BranchesController;
+use App\Http\Controllers\ConfigurationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,12 @@ Route::middleware(['auth', 'checkStatus', 'user.menu'])->group(function () {
         
         Route::resource('/sucursales', BranchesController::class, ['names' => 'branches'])
         ->parameters(['sucursales' => 'branch']);
+
+        Route::resource('/configuracion', ConfigurationsController::class, ['names' => 'configurations'])
+        ->parameters(['configuracion' => 'configuration']);
+
+        Route::post('/configuracion/{configuration}', [ConfigurationsController::class, 'update'])->name('configurations.update');
+
     });
 });
 

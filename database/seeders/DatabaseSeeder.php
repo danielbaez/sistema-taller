@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Configuration;
 use App\Models\Log;
 use App\Models\User;
 use App\Models\Branch;
@@ -18,6 +19,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        Configuration::create(['company' => 'Mi Empresa S.A.C', 'document_number' => '12345678901', 'address' => 'San Isidro Labrador - San Vicente de Cañete', 'phone' => '5811111']);
+
         $this->call(RoleSeeder::class);
 
         Branch::factory(3)->create();

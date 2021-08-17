@@ -13,11 +13,11 @@
         @include('partials.table', ['url' => route($resource.'.index'), 'columns' => $columns])
     @endhasallpermissions
     @hasallpermissions($resource.'.create')
-        @include($resource.'.create', ['form' => 'create', 'resource' => $resource, 'title' => $titleForm])
+        @include($resource.'.create', ['form' => 'create', 'resource' => $resource, 'title' => $titleForm, 'enctype' => false])
     @endhasallpermissions
     @hasallpermissions($resource.'.index')
         @hasallpermissions($resource.'.edit')
-            @include($resource.'.create', ['form' => 'edit', 'title' => $titleForm])
+            @include($resource.'.create', ['form' => 'edit', 'title' => $titleForm, 'enctype' => false])
         @endhasallpermissions
         @hasanypermission([$resource.'.activate', $resource.'.destroy'])
             @include('partials.form.activate_or_desactivate', ['title' => $titleForm])

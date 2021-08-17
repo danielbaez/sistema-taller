@@ -810,8 +810,12 @@ $(document).on('click', '.btn-submit-create, .btn-submit-edit, .btn-submit-statu
 
     var form = $this.parents('form');
 
+    var enctype = form.attr('enctype') == 'multipart/form-data' ? true : false;
+    var processData = enctype ? false : true;
+    var contentType = enctype ? false : 'application/x-www-form-urlencoded; charset=UTF-8';
+
     var url = form.attr('action');
-    var data = form.serialize();
+    var data = enctype ? new FormData(form[0]) : form.serialize();
     var modal = ($this.parents('.modal'));
     var text_button = $this.html();
     removeValidationErrorMessage();
@@ -824,6 +828,8 @@ $(document).on('click', '.btn-submit-create, .btn-submit-edit, .btn-submit-statu
    		type: form.attr('method'),
         url: url,
         data: data,
+        processData: processData,
+        contentType: contentType,
         success: function(data) {
       		if(data.success) {
 	          	var table = $.fn.dataTable.tables(true);
@@ -916,6 +922,8 @@ $(document).on('click', '#edit', function(e) {
 									}
 								}
 							break;
+							case 'file':
+							break;
 							default:
 								$(this).val(data[name]);
 							break;
@@ -999,3 +1007,8 @@ function validationErrorMessage(form, errors) {
 function removeValidationErrorMessage(form, errors) {
 	$('.validation-error-message').remove();
 }
+
+$(document).on('click', '.image-in-table', function(e) {
+    var image = $(this).attr('src');
+    $(".showimage").attr("src", image);
+});

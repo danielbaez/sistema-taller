@@ -207,9 +207,11 @@ if(!function_exists('destroyGeneric'))
 
 if(!function_exists('datatablesGeneric'))
 {
-    function datatablesGeneric($data, $request, $resource)
+    function datatablesGeneric($data, $request, $resource, $addColumns = [])
     {
-        return datatables()->of($data)
+        $rawColumns = ['action'];
+
+        $table = datatables()->of($data)
         //->addIndexColumn()
         ->filter(function ($query) use ($request) {
             if($request->get('aaa')) {
@@ -219,9 +221,25 @@ if(!function_exists('datatablesGeneric'))
         ->addColumn('action', function($row) use ($resource) {
             $btn = view('partials.options', compact('row', 'resource'))->render();
             return $btn;
-        })
-        ->rawColumns(['action'])
+        });
+
+        if(count($addColumns))
+        {
+            foreach($addColumns as $column)
+            {
+                $table = $table->addColumn($column['name'], function($row) use ($resource, $column) {
+                    $btn = view($column['view'], compact('row', 'resource'))->render();
+                    return $btn;
+                });
+
+                $rawColumns[] = $column['name'];
+            }
+        }
+
+        $table = $table->rawColumns($rawColumns)
         ->make(true);
+
+        return $table;
     }
 }
 

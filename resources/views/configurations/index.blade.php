@@ -9,15 +9,12 @@
 
 @section('content')
     @hasallpermissions($resource.'.index')
-        @include('partials.search')
         @include('partials.table', ['url' => route($resource.'.index'), 'columns' => $columns])
-    @endhasallpermissions
-    @hasallpermissions($resource.'.create')
-        @include($resource.'.create', ['form' => 'create', 'resource' => $resource, 'title' => $titleForm, 'enctype' => false])
+        @include('partials.form.image')
     @endhasallpermissions
     @hasallpermissions($resource.'.index')
         @hasallpermissions($resource.'.edit')
-            @include($resource.'.create', ['form' => 'edit', 'title' => $titleForm, 'enctype' => false])
+            @include($resource.'.edit', ['form' => 'edit', 'title' => $titleForm, 'enctype' => true])
         @endhasallpermissions
         @hasanypermission([$resource.'.activate', $resource.'.destroy'])
             @include('partials.form.activate_or_desactivate', ['title' => $titleForm])
@@ -25,11 +22,18 @@
     @endhasallpermissions
 @stop
 
+@section('css')
+    <style>
+        .custom-file-input ~ .custom-file-label::after {
+            content: "Elegir";
+        }
+    </style>
+@stop
+
 @section('js')
-    <script>
+    <script type="text/javascript">
         $(function () {
-            dataTableServerSide(null, null, '{{ $title }}', '{{ $title }}', 'portrait', 'A4', false, true, true, true, true, true, true);
+            dataTableServerSide(null, null, '{{ $title }}', '{{ $title }}', 'portrait', 'A4', false, true, true, true, true, false, true);
         });
     </script>
-    <script src="{{ asset('js/users-roles.js') }}"></script>
 @stop

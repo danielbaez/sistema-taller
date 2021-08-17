@@ -8,7 +8,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="POST" action="{{ $action }}" autocomplete="off">
+        <form method="POST" action="{{ $action }}" @if($enctype) enctype="multipart/form-data" @endif autocomplete="off">
           @yield('form_content')
           <div class="modal-footer">
             @yield('form_button', view('partials.form.create_button'))

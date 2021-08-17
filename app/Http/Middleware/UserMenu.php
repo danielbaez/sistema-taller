@@ -44,7 +44,7 @@ class UserMenu
                 [
                     'text'        => 'Usuarios',
                     'url'         => route('users.index'),
-                    'icon'        => 'far fa-fw fa-user',
+                    'icon'        => 'fas fa-fw fa-users',
                     'label_color' => 'success',
                     'permission'  => ['users.index', 'users.create'],
                     'submenu' => [
@@ -77,12 +77,6 @@ class UserMenu
                     'permission'  => ['branches.index', 'branches.create']
                 ],
                 [
-                    'text'        => 'Empleados',
-                    'url'         => 'products',
-                    'icon'        => 'fas fa-fw fa-users',
-                    'label_color' => 'success'
-                ],
-                [
                     'text'        => 'Categorías',
                     'url'         => 'products',
                     'icon'        => 'fab fa-fw fa-product-hunt',
@@ -106,6 +100,13 @@ class UserMenu
                     'icon'        => 'fab fa-fw fa-product-hunt',
                     'label_color' => 'success'
                 ],
+                [
+                    'text'        => 'Configuración',
+                    'url'         => route('configurations.index'),
+                    'icon'        => 'fas fa-fw fa-cog',
+                    'label_color' => 'success',
+                    'permission'  => ['configurations.index']
+                ]
             ];
         }
 
