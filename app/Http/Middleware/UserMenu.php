@@ -91,16 +91,11 @@ class UserMenu
                     'permission'  => ['brands.index', 'brands.create']
                 ],
                 [
-                    'text'        => 'Presentaciones',
-                    'url'         => 'products',
+                    'text'        => 'Modelos',
+                    'url'         => route('models.index'),
                     'icon'        => 'fab fa-fw fa-product-hunt',
-                    'label_color' => 'success'
-                ],
-                [
-                    'text'        => 'Productos',
-                    'url'         => 'products',
-                    'icon'        => 'fab fa-fw fa-product-hunt',
-                    'label_color' => 'success'
+                    'label_color' => 'success',
+                    'permission'  => ['models.index', 'models.create']
                 ],
                 [
                     'text'        => 'Configuración',

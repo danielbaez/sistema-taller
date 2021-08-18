@@ -9,6 +9,7 @@ use App\Http\Controllers\BranchesController;
 use App\Http\Controllers\ConfigurationsController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\BrandsController;
+use App\Http\Controllers\ModelsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,9 @@ Route::middleware(['auth', 'checkStatus', 'user.menu'])->group(function () {
 
         Route::resource('/marcas', BrandsController::class, ['names' => 'brands'])
         ->parameters(['marcas' => 'brand']);
+
+        Route::resource('/modelos', ModelsController::class, ['names' => 'models'])
+        ->parameters(['modelos' => 'model']);
     });
 });
 
