@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Http\Requests\RoleRequest;
+use App\Models\Category;
+use App\Models\Brand;
+use App\Models\Model;
+use App\Models\Device;
+use App\Http\Requests\DeviceRequest;
 use Illuminate\Support\Facades\DB;
-use App\Models\Role;
-use App\Http\Requests\UserRequest;
-use Illuminate\Support\Facades\Hash;
 
-class UsersController extends Controller
+class DevicesController extends Controller
 {
-    public $title = 'Usuarios';
-    public $titleForm = 'Usuario';
-    public $titleMessageLog = 'el usuario';
+    public $title = 'Equipos';
+    public $titleForm = 'Equipo';
+    public $titleMessageLog = 'el equipo';
 
     public function __construct()
     {
@@ -27,7 +27,10 @@ class UsersController extends Controller
 
         if($request->ajax())
         {
-            $data = User::orderBy('id', 'desc')->get();
+            $data = Device::with('category')
+            ->with('brand')
+            ->with('model')
+            ->orderBy('devices.id', 'desc')->get();
 
             return datatablesGeneric($data, $request, $resource);
         }
@@ -37,15 +40,20 @@ class UsersController extends Controller
 
         $columns = [
             ['title' => '#', 'data' => 'id', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
-            ['title' => 'Nombre', 'data' => 'name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
+            ['title' => 'Categoría', 'data' => 'category.name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
+            ['title' => 'Marca', 'data' => 'brand.name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
+            ['title' => 'Modelo', 'data' => 'model.name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
+            ['title' => 'Nro Serie', 'data' => 'serial_number', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true'],
             ['title' => 'Estado', 'data' => 'status_name', 'export' => 'true', 'orderable' => 'true', 'searchable' => 'true']
         ];
 
         $columns = array_filter(array_merge($columns, permissionsToShowActionButton($resource)));
 
-        $roles = Role::all();
+        $categories = Category::all();
+        $brands = Brand::all();
+        $models = Model::all();
 
-        return view($resource.'.index', compact('title', 'titleForm', 'columns', 'resource', 'roles'));
+        return view($resource.'.index', compact('title', 'titleForm', 'columns', 'resource', 'categories', 'brands', 'models'));
     }
 
     /**
@@ -64,23 +72,16 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(DeviceRequest $request)
     {
         try {
             DB::beginTransaction();
 
-            $request->request->add(['password' => Hash::make($request->password)]);
+            $request->request->add(['user_id' => auth()->user()->id]);
 
-            $user = User::create($request->all());
+            $device = Device::create($request->all());
 
-            /*$user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'status' => 1
-            ]);*/
-
-            logsStore("store", "$this->titleMessageLog $user->name - id: $user->id", 1);
+            logsStore("store", "$this->titleMessageLog - id: $device->id", 1);
 
             DB::commit();
 
@@ -106,7 +107,7 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        return User::findOrFail($id);
+        return Device::findOrFail($id);
     }
 
     /**
@@ -127,33 +128,16 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, User $user)
+    public function update(DeviceRequest $request, Device $device)
     {
         try {
             DB::beginTransaction();
+
+            $request->request->add(['user_id' => auth()->user()->id]);
             
-            /*$user->name = $request->get('name');
-            $user->email = $request->get('email');
+            $device->update($request->all());
 
-            if(!empty($request->password))
-            {
-                $user->password = Hash::make($request->password);    
-            }
-            
-            $user->save();*/
-
-            if(!empty($request->password))
-            {
-                $request->request->add(['password' => Hash::make($request->password)]);
-            }
-            else
-            {
-                $request->request->remove('password');
-            }
-
-            $user->update($request->all());
-
-            logsStore("update", "$this->titleMessageLog $user->name - id: $user->id", 1);
+            logsStore("update", "$this->titleMessageLog - id: $device->id", 1);
 
             DB::commit();
 
@@ -161,7 +145,7 @@ class UsersController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             
-            logsStore("update", "$this->titleMessageLog - id: $user->id", 0, $e);
+            logsStore("update", "$this->titleMessageLog - id: $device->id", 0, $e);
 
             $success = false;
         }
@@ -177,8 +161,8 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, User $user)
+    public function destroy(Request $request, Device $device)
     {
-        return destroyGeneric($request, $user, $this->titleMessageLog.' '.$user->name);
+        return destroyGeneric($request, $device, $this->titleMessageLog.' '.$device->name);
     }
 }

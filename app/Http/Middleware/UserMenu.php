@@ -98,6 +98,13 @@ class UserMenu
                     'permission'  => ['models.index', 'models.create']
                 ],
                 [
+                    'text'        => 'Equipos',
+                    'url'         => route('devices.index'),
+                    'icon'        => 'fab fa-fw fa-product-hunt',
+                    'label_color' => 'success',
+                    'permission'  => ['devices.index', 'devices.create']
+                ],
+                [
                     'text'        => 'Configuración',
                     'url'         => route('configurations.index'),
                     'icon'        => 'fas fa-fw fa-cog',

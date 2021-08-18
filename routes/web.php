@@ -10,6 +10,7 @@ use App\Http\Controllers\ConfigurationsController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\BrandsController;
 use App\Http\Controllers\ModelsController;
+use App\Http\Controllers\DevicesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +67,9 @@ Route::middleware(['auth', 'checkStatus', 'user.menu'])->group(function () {
 
         Route::resource('/modelos', ModelsController::class, ['names' => 'models'])
         ->parameters(['modelos' => 'model']);
+
+        Route::resource('/equipos', DevicesController::class, ['names' => 'devices'])
+        ->parameters(['equipos' => 'device']);
     });
 });
 
