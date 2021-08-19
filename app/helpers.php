@@ -107,7 +107,10 @@ if(!function_exists('hasAllPermissions'))
 {
     function hasAllPermissions($permission)
     {
-        $role = Role::find(session('roleId'));
+        //$role = Role::find(session('roleId'));
+
+        $role = new Role();
+        $role->id = session('roleId');
         
         if(!$role->hasAllPermissions($permission))
         {
@@ -122,7 +125,10 @@ if(!function_exists('hasAnyPermission'))
 {
     function hasAnyPermission($permission)
     {
-        $role = Role::find(session('roleId'));
+        //$role = Role::find(session('roleId'));
+
+        $role = new Role();
+        $role->id = session('roleId');
         
         if(!$role->hasAnyPermission($permission))
         {

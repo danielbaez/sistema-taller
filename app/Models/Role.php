@@ -60,31 +60,71 @@ class Role extends Model
 
     public function hasAnyPermission($permission)
     {
-        $count = $this->permissions->whereIn('name', $permission)->count();
+        if(!is_array($permission))
+        {
+            $permission = [$permission];
+        }
+
+        if(session()->has('permissions'))
+        {
+            $perms = session()->get('permissions');
+
+            $count = 0;
+
+            foreach($permission as $per)
+            {
+                $count += is_numeric(array_search($per, array_column($perms, 'name'))) ? 1 : 0;
+            }
+        }
+        else
+        {
+            $count = $this->permissions->whereIn('name', $permission)->count();
+        }
 
         return $count ? true : false;
     }
 
     public function hasAllPermissions($permission)
     {
-        $count = $this->permissions;
-
         $permission_count = 0;
 
         if(is_array($permission))
         {
             $permission_count = count($permission);
 
-            $count = $count->whereIn('name', $permission);
+            if(session()->has('permissions'))
+            {
+                $perms = session()->get('permissions');
+
+                $count = 0;
+
+                foreach($permission as $per)
+                {
+                    $count += is_numeric(array_search($per, array_column($perms, 'name'))) ? 1 : 0;
+                }
+            }
+            else
+            {
+                $count = $this->permissions->whereIn('name', $permission)->count();
+            }
         }
         else
         {
             $permission_count = 1;
-            
-            $count = $count->where('name', $permission);
-        }
 
-        $count = $count->count();
+            if(session()->has('permissions'))
+            {
+                $perms = session()->get('permissions');
+
+                $count = 0;
+
+                $count += is_numeric(array_search($permission, array_column($perms, 'name'))) ? 1 : 0;
+            }
+            else
+            {
+                $count = $this->permissions->where('name', $permission)->count();
+            }
+        }
 
         return $count == $permission_count ? true : false;
     }

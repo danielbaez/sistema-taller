@@ -54,7 +54,15 @@ class User extends Authenticatable
 
     public function adminlte_desc()
     {
-        return Role::find(session('roleId'))->name ?? '';
+        //return Role::find(session('roleId'))->name ?? '';
+        if(session()->has('permissions'))
+        {
+            return session('roleName');
+        }
+        else
+        {
+            return Role::find(session('roleId'))->name ?? '';
+        }
     }
 
     public function adminlte_profile_url()

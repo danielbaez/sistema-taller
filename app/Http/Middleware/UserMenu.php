@@ -27,6 +27,8 @@ class UserMenu
             Session::forget('userAccountId');
             Session::forget('roleId');
             Session::forget('branchId');
+            Session::forget('roleName');
+            Session::forget('permissions');
         }
 
         $menu = [];
