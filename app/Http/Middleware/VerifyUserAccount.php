@@ -33,7 +33,7 @@ class VerifyUserAccount
 
                 if($userAccount)
                 {
-                    $permissions = Role::find($roleId)->permissions->makeHidden(['pivot', 'description', 'status_name', 'created_at', 'updated_at'])->toArray();
+                    $permissions = $role->permissions->makeHidden(['pivot', 'description', 'status_name', 'created_at', 'updated_at'])->toArray();
 
                     $request->session()->put('roleName', $role->name);
                     $request->session()->put('permissions', $permissions);
