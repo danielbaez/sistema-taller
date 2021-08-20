@@ -29,7 +29,7 @@ use App\Http\Controllers\DevicesController;
 
 Auth::routes(['register' => true, 'reset' => false, 'confirm' => false, 'verify' => false]);
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->middleware('guest')->name('home');
 
 Route::middleware(['auth', 'checkStatus', 'user.menu'])->group(function () {
     Route::get('/rolesList', [UsersAccountsController::class, 'rolesList'])
