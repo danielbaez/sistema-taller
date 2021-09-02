@@ -55,7 +55,7 @@
 @section('content')
 	<div class="row">
 		<div class="col-12">
-			<table class="table table-bordered table-striped table-hover bg-white" id="my-table">
+			<table class="table table-bordered table-striped table-hover bg-white d-none" id="my-table">
 				<thead>
 					<tr class="text-center">
 						<th scope="col" data-export="true">#</th>

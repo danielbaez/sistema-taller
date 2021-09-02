@@ -79,6 +79,13 @@ class UserMenu
                     'permission'  => ['branches.index', 'branches.create']
                 ],
                 [
+                    'text'        => 'Clientes',
+                    'url'         => route('clients.index'),
+                    'icon'        => 'fas fa-fw fa-users',
+                    'label_color' => 'success',
+                    'permission'  => ['clients.index', 'clients.create']
+                ],
+                [
                     'text'        => 'Categorías',
                     'url'         => route('categories.index'),
                     'icon'        => 'fab fa-fw fa-product-hunt',

@@ -7,6 +7,7 @@ use App\Http\Controllers\UsersAccountsController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\BranchesController;
 use App\Http\Controllers\ConfigurationsController;
+use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\BrandsController;
 use App\Http\Controllers\ModelsController;
@@ -58,6 +59,9 @@ Route::middleware(['auth', 'checkStatus', 'user.menu'])->group(function () {
         ->parameters(['configuracion' => 'configuration']);
 
         Route::post('/configuracion/{configuration}', [ConfigurationsController::class, 'update'])->name('configurations.update');
+
+        Route::resource('/clientes', ClientsController::class, ['names' => 'clients'])
+        ->parameters(['clientes' => 'client']);
 
         Route::resource('/categorias', CategoriesController::class, ['names' => 'categories'])
         ->parameters(['categorias' => 'category']);

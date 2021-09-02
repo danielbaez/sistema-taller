@@ -48,6 +48,12 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'configurations.index', 'description' => 'Ver Configuración', 'status' => 1])->syncRoles([$role1->id]);
         Permission::create(['name' => 'configurations.edit', 'description' => 'Editar Configuración', 'status' => 1])->syncRoles([$role1->id]);
 
+        Permission::create(['name' => 'clients.index', 'description' => 'Ver Clientes', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
+        Permission::create(['name' => 'clients.create', 'description' => 'Crear Cliente', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
+        Permission::create(['name' => 'clients.edit', 'description' => 'Editar Cliente', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
+        Permission::create(['name' => 'clients.destroy', 'description' => 'Eliminar Cliente', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
+        Permission::create(['name' => 'clients.activate', 'description' => 'Activar Cliente', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
+
         Permission::create(['name' => 'categories.index', 'description' => 'Ver Categorías', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
         Permission::create(['name' => 'categories.create', 'description' => 'Crear Categoría', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
         Permission::create(['name' => 'categories.edit', 'description' => 'Editar Categoría', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
