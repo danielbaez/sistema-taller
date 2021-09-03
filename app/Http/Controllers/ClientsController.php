@@ -75,6 +75,8 @@ class ClientsController extends Controller
         try {
             DB::beginTransaction();
 
+            $request->request->add(['status' => 1]);
+
             $client = Client::create($request->all());
 
             logsStore("store", "$this->titleMessageLog $client->name - id: $client->id", 1);

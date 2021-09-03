@@ -60,13 +60,4 @@ class UserAccount extends Model
         //return $this->status == config('system.status.1') ? 1 : 0;
         return $this->status == 1 ? 1 : 0;
     }
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->status = 1;
-        });
-    }
 }

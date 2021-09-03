@@ -67,6 +67,8 @@ class BranchesController extends Controller
         try {
             DB::beginTransaction();
 
+            $request->request->add(['status' => 1]);
+
             $branch = Branch::create($request->all());
 
             logsStore("store", "$this->titleMessageLog $branch->name - id: $branch->id", 1);

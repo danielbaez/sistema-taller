@@ -64,6 +64,8 @@ class BrandsController extends Controller
         try {
             DB::beginTransaction();
 
+            $request->request->add(['status' => 1]);
+
             $brand = Brand::create($request->all());
 
             logsStore("store", "$this->titleMessageLog $brand->name - id: $brand->id", 1);

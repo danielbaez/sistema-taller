@@ -77,7 +77,7 @@ class DevicesController extends Controller
         try {
             DB::beginTransaction();
 
-            $request->request->add(['user_id' => auth()->user()->id]);
+            $request->request->add(['status' => 1, 'user_id' => auth()->user()->id]);
 
             $device = Device::create($request->all());
 

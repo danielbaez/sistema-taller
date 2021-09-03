@@ -69,7 +69,7 @@ class UsersController extends Controller
         try {
             DB::beginTransaction();
 
-            $request->request->add(['password' => Hash::make($request->password)]);
+            $request->request->add(['status' => 1, 'password' => Hash::make($request->password)]);
 
             $user = User::create($request->all());
 

@@ -64,6 +64,8 @@ class ModelsController extends Controller
         try {
             DB::beginTransaction();
 
+            $request->request->add(['status' => 1]);
+
             $model = Model::create($request->all());
 
             logsStore("store", "$this->titleMessageLog $model->name - id: $model->id", 1);

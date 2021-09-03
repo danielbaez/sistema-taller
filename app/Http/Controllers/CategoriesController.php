@@ -64,6 +64,8 @@ class CategoriesController extends Controller
         try {
             DB::beginTransaction();
 
+            $request->request->add(['status' => 1]);
+
             $category = Category::create($request->all());
 
             logsStore("store", "$this->titleMessageLog $category->name - id: $category->id", 1);

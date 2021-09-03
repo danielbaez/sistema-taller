@@ -59,6 +59,8 @@ class UsersAccountsController extends Controller
         try {
             DB::beginTransaction();
 
+            $request->request->add(['status' => 1]);
+
             $userAccount = UserAccount::create($request->all());
 
             logsStore("store", "$this->titleMessageLog - id: $userAccount->id", 1);

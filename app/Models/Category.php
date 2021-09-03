@@ -19,13 +19,4 @@ class Category extends Model
     {
         return config('system.status.'.$this->status);
     }
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->status = 1;
-        });
-    }
 }

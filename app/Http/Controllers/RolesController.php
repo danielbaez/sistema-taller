@@ -67,6 +67,8 @@ class RolesController extends Controller
         try {
             DB::beginTransaction();
 
+            $request->request->add(['status' => 1]);
+
             $role = Role::create($request->all());
 
             $role->syncPermissions($request->permissions);
