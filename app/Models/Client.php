@@ -12,8 +12,6 @@ class Client extends Model
 
     protected $fillable = ['name', 'document_id', 'document_number', 'company_name', 'address', 'phone', 'email'];
 
-    protected $appends = ['status_name'];
-
     public function document()
     {
         return $this->belongsTo(Document::class);

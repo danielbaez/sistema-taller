@@ -13,7 +13,7 @@ class Branch extends Model
 
     protected $fillable = ['name', 'document_number', 'address', 'phone', 'status'];
 
-    protected $appends = ['status_name'];
+    //protected $appends = ['status_name'];
 
     public function user_accounts()
     {

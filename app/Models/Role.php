@@ -12,8 +12,6 @@ class Role extends Model
 
     protected $fillable = ['name', 'status'];
 
-    protected $appends = ['status_name'];
-
     public function permissions()
     {
         return $this->belongsToMany(Permission::class);

@@ -12,7 +12,5 @@ class Model extends Eloquent
 
     protected $fillable = ['name', 'status'];
 
-    protected $appends = ['status_name'];
-
     public $timestamps = false;
 }

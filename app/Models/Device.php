@@ -12,8 +12,6 @@ class Device extends Eloquent
 
     protected $fillable = ['user_id', 'category_id', 'brand_id', 'model_id', 'serial_number', 'status'];
 
-    protected $appends = ['status_name'];
-
     public function category()
     {
         return $this->belongsTo(Category::class);

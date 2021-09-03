@@ -15,8 +15,6 @@ class UserAccount extends Model
 
     protected $fillable = ['user_id', 'role_id', 'branch_id', 'status'];
 
-    protected $appends = ['status_name'];
-
     public function user()
     {
     	return $this->belongsTo(User::class);

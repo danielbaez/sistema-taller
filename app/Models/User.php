@@ -27,8 +27,6 @@ class User extends Authenticatable
         'status'
     ];
 
-    protected $appends = ['status_name'];
-
     /**
      * The attributes that should be hidden for arrays.
      *
