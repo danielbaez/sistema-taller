@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Models\UserAccount;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\StatusName;
 
 class Branch extends Model
 {
-    use HasFactory;
+    use HasFactory, StatusName;
 
     protected $fillable = ['name', 'document_number', 'address', 'phone', 'status'];
 
@@ -17,10 +18,5 @@ class Branch extends Model
     public function user_accounts()
     {
         return $this->hasMany(UserAccount::class);
-    }
-
-    public function getStatusNameAttribute()
-    {
-        return config('system.status.'.$this->status);
     }
 }

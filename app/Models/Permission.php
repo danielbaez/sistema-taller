@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\StatusName;
 
 class Permission extends Model
 {
-    use HasFactory;
+    use HasFactory, StatusName;
 
     protected $fillable = ['name', 'description', 'status'];
 
@@ -16,11 +17,6 @@ class Permission extends Model
     public function roles()
     {
         return $this->belongsToMany(Role::class);
-    }
-
-    public function getStatusNameAttribute()
-    {
-        return config('system.status.'.$this->status);
     }
 
     /*public function syncRoles(...$roles)

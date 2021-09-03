@@ -25,6 +25,7 @@ class BranchesController extends Controller
         if($request->ajax())
         {
             $data = Branch::orderBy('id', 'desc')->get();
+            //$data->append('status_name');
 
             return datatablesGeneric($data, $request, $resource);
         }

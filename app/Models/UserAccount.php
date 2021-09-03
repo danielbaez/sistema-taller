@@ -7,10 +7,11 @@ use App\Models\Branch;
 use App\Models\Role;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\StatusName;
 
 class UserAccount extends Model
 {
-    use HasFactory;
+    use HasFactory, StatusName;
 
     protected $fillable = ['user_id', 'role_id', 'branch_id', 'status'];
 
@@ -49,11 +50,6 @@ class UserAccount extends Model
     {
         return config('system.status.'.$value);
     }*/
-
-    public function getStatusNameAttribute()
-    {
-        return config('system.status.'.$this->status);
-    }
 
     public function getIsActiveAttribute()
     {

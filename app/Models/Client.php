@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\StatusName;
 
 class Client extends Model
 {
-    use HasFactory;
+    use HasFactory, StatusName;
 
     protected $fillable = ['name', 'document_id', 'document_number', 'company_name', 'address', 'phone', 'email'];
 
@@ -16,10 +17,5 @@ class Client extends Model
     public function document()
     {
         return $this->belongsTo(Document::class);
-    }
-
-    public function getStatusNameAttribute()
-    {
-        return config('system.status.'.$this->status);
     }
 }

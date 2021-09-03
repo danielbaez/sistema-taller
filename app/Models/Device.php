@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use App\Traits\StatusName;
 
 class Device extends Eloquent
 {
-    use HasFactory;
+    use HasFactory, StatusName;
 
     protected $fillable = ['user_id', 'category_id', 'brand_id', 'model_id', 'serial_number', 'status'];
 
@@ -26,10 +27,5 @@ class Device extends Eloquent
     public function model()
     {
         return $this->belongsTo(Model::class);
-    }
-
-    public function getStatusNameAttribute()
-    {
-        return config('system.status.'.$this->status);
     }
 }

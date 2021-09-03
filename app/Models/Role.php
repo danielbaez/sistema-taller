@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\StatusName;
 
 class Role extends Model
 {
-    use HasFactory;
+    use HasFactory, StatusName;
 
     protected $fillable = ['name', 'status'];
 
@@ -138,9 +139,4 @@ class Role extends Model
     {
         return config('system.status.'.$value);
     }*/
-
-    public function getStatusNameAttribute()
-    {
-        return config('system.status.'.$this->status);
-    }
 }
