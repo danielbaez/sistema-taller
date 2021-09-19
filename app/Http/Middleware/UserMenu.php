@@ -57,7 +57,7 @@ class UserMenu
                             'permission'  => ['users.index', 'users.create']
                         ],
                         [
-                            'text'        => 'Roles',
+                            'text'        => 'Roles de Usuarios',
                             'url'         => route('usersAccounts.index'),
                             'label_color' => 'success',
                             'permission'  => ['usersAccounts.index', 'usersAccounts.create']

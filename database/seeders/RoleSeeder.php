@@ -72,10 +72,10 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'models.destroy', 'description' => 'Eliminar Modelo', 'resource' => 'Modelos', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
         Permission::create(['name' => 'models.activate', 'description' => 'Activar Modelo', 'resource' => 'Modelos', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
 
-        Permission::create(['name' => 'devices.index', 'description' => 'Ver Equipos', 'resource' => 'Dispositivos', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
-        Permission::create(['name' => 'devices.create', 'description' => 'Crear Equipo', 'resource' => 'Dispositivos', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
-        Permission::create(['name' => 'devices.edit', 'description' => 'Editar Equipo', 'resource' => 'Dispositivos', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
-        Permission::create(['name' => 'devices.destroy', 'description' => 'Eliminar Equipo', 'resource' => 'Dispositivos', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
-        Permission::create(['name' => 'devices.activate', 'description' => 'Activar Equipo', 'resource' => 'Dispositivos', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
+        Permission::create(['name' => 'devices.index', 'description' => 'Ver Equipos', 'resource' => 'Equipos', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
+        Permission::create(['name' => 'devices.create', 'description' => 'Crear Equipo', 'resource' => 'Equipos', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
+        Permission::create(['name' => 'devices.edit', 'description' => 'Editar Equipo', 'resource' => 'Equipos', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
+        Permission::create(['name' => 'devices.destroy', 'description' => 'Eliminar Equipo', 'resource' => 'Equipos', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
+        Permission::create(['name' => 'devices.activate', 'description' => 'Activar Equipo', 'resource' => 'Equipos', 'status' => 1])->syncRoles([$role1->id, $role2->id]);
     }
 }
