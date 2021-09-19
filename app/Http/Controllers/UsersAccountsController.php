@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\UserAccountRequest;
 use Illuminate\Support\Facades\DB;
+use App\Providers\RouteServiceProvider;
 
 class UsersAccountsController extends Controller
 {
@@ -163,7 +164,7 @@ class UsersAccountsController extends Controller
 
             logsStore(false, "Ingresa con el rol de usuario id: $user_account->id", 1);
 
-    		return redirect()->route('dashboard');
+    		return redirect(RouteServiceProvider::HOME);
     	}
 
     	return redirect()->back();

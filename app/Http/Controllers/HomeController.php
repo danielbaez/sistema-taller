@@ -18,6 +18,11 @@ class HomeController extends Controller
         return redirect()->route('login');        
     }
 
+    public function home()
+    {
+        return view('home');
+    }
+
     public function dashboard()
     {
         return view('dashboard');

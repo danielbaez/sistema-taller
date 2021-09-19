@@ -30,7 +30,7 @@ use App\Http\Controllers\DevicesController;
 
 Auth::routes(['register' => true, 'reset' => false, 'confirm' => false, 'verify' => false]);
 
-Route::get('/', [HomeController::class, 'index'])->middleware('guest')->name('home');
+Route::get('/', [HomeController::class, 'index'])->middleware('guest')->name('index');
 
 Route::middleware(['auth', 'checkStatus', 'user.menu'])->group(function () {
     Route::get('/rolesList', [UsersAccountsController::class, 'rolesList'])
@@ -40,6 +40,8 @@ Route::middleware(['auth', 'checkStatus', 'user.menu'])->group(function () {
     ->name('enterRole');
 
     Route::middleware(['verify.user.account'])->group(function () {
+        Route::get('/home', [HomeController::class, 'home'])->name('home');
+
         Route::get('/dashboard', [HomeController::class, 'dashboard'])
         ->name('dashboard');
         
