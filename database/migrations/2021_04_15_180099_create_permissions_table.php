@@ -17,6 +17,7 @@ class CreatePermissionsTable extends Migration
             $table->id();
             $table->string('name', 50);
             $table->string('description', 100);
+            $table->string('resource', 100);
             $table->tinyInteger('status');
             $table->timestamps();
         });

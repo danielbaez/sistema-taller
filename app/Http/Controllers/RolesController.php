@@ -41,9 +41,9 @@ class RolesController extends Controller
 
         $columns = array_filter(array_merge($columns, permissionsToShowActionButton($resource)));
 
-        $permissions = Permission::all();
+        $permissionGroups = Permission::all()->groupBy('resource');
 
-        return view($resource.'.index', compact('title', 'titleForm', 'columns', 'resource', 'permissions'));
+        return view($resource.'.index', compact('title', 'titleForm', 'columns', 'resource', 'permissionGroups'));
     }
 
     /**
