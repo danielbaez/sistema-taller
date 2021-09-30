@@ -25,22 +25,24 @@ class VerifyUserAccount
 
         if($roleId)
         {
-            $role = Role::where('id', $roleId)->where('status', 1)->first();
+            //$role = Role::where('id', $roleId)->where('status', 1)->first();
 
-            if($role)
+            $userAccount = Role::join('user_accounts', 'roles.id', '=', 'user_accounts.role_id')
+            ->where('roles.status', 1)
+            ->where('user_accounts.user_id', auth()->user()->id)
+            ->where('user_accounts.role_id', $roleId)
+            ->where('user_accounts.status', 1)
+            ->first();
+
+            if($userAccount)
             {
-                $userAccount = UserAccount::where('user_id', auth()->user()->id)->where('role_id', $roleId)->where('status', 1)->first();
+                $permissions = $userAccount->permissions->makeHidden(['pivot', 'description', 'status_name', 'created_at', 'updated_at'])->toArray();
 
-                if($userAccount)
-                {
-                    $permissions = $role->permissions->makeHidden(['pivot', 'description', 'status_name', 'created_at', 'updated_at'])->toArray();
+                $request->session()->put('roleName', $userAccount->name);
+                $request->session()->put('permissions', $permissions);
 
-                    $request->session()->put('roleName', $role->name);
-                    $request->session()->put('permissions', $permissions);
-
-                    $pass = true;                
-                }          
-            }
+                $pass = true;                
+            }          
         }
 
         if(!$pass)
