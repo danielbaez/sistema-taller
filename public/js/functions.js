@@ -1,6 +1,5 @@
 $('.login-logo img').addClass('img-fluid');
 
-
 setHeaderAjax();
 
 setInterval(refreshToken, 1000*60*30);
@@ -65,7 +64,7 @@ function dataTableClientSide(tableId, tableColumns, fileName, titleFile, orienta
 	    });
 	}
 
-	console.log(exportColumns)
+	//console.log(exportColumns)
 
     for(var key in tableColumns) {
 	    if(tableColumns[key].hasOwnProperty('export')) {
@@ -431,8 +430,14 @@ function dataTableServerSide(tableId, tableColumns, fileName, titleFile, orienta
             	return $.extend({}, d, adittional);
             },
             complete: function(data) {
+            	//console.log(data);
             	$('#'+tableId).removeClass('d-none');
             	//$('.dataTables_paginate').parent().parent().find('div').first().removeClass();
+            },
+            error: function(data) {
+            	if(data.status == 403) {
+            		location.reload();
+            	}
             }
         },
         columns: tableColumns,
@@ -719,6 +724,10 @@ function overwriteExport(tableId, tableColumns, method='GET', dataForm='') {
 		        },
 		        async: false
 		    });
+
+		    /*if(jsonResult.status == 403) {
+		    	location.reload();
+		    }*/
 
 		    jsonResult.responseJSON.data.forEach(function(part, index, theArray) {
 		        var newData = [];
@@ -1026,6 +1035,7 @@ function showAlert(status, message, animateTop = true) {
   	$('#alert-message .alert').addClass(alertClass);
   	$('#alert-message .alert').html(iconMessage + ' ' + message);
   	$('#alert-message').removeClass('d-none');
+  	$('#alert-message-refresh').addClass('d-none');
 
   	if(animateTop) {
   		$('html').animate({ scrollTop: 0 }, 350, function () {
@@ -1058,4 +1068,10 @@ function removeValidationErrorMessage(form, errors) {
 $(document).on('click', '.image-in-table', function(e) {
     var image = $(this).attr('src');
     $(".showimage").attr("src", image);
+});
+
+$(document).ajaxError(function(event, request, settings) {
+  if(request.status == 403) {
+  	location.reload();
+  }
 });

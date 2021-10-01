@@ -17,3 +17,13 @@
 		</div>
     </div>
 </div>
+
+@if(session('message'))
+	<div class="row" id="alert-message-refresh">
+		<div class="col-12">
+	    	<div class="alert alert-{{ session('message')[0] == 1 ? 'success' : 'danger' }}">
+			  <i class="fas fa-check icon-c"></i> {{ session('message')[1] }}
+			</div>
+	    </div>
+	</div>
+@endif
