@@ -404,6 +404,9 @@ function dataTableServerSide(tableId, tableColumns, fileName, titleFile, orienta
 	}
 
     var table = $('#'+tableId).DataTable({
+    	initComplete: function() {
+    		$('#'+tableId).removeClass('d-none');
+    	},
     	language: {
             url: '/datatable_spanish.json'
         },
@@ -431,7 +434,6 @@ function dataTableServerSide(tableId, tableColumns, fileName, titleFile, orienta
             },
             complete: function(data) {
             	//console.log(data);
-            	$('#'+tableId).removeClass('d-none');
             	//$('.dataTables_paginate').parent().parent().find('div').first().removeClass();
             },
             error: function(data) {

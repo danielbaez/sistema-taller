@@ -10,7 +10,7 @@ class Client extends Model
 {
     use HasFactory, StatusName;
 
-    protected $fillable = ['name', 'document_id', 'document_number', 'company_name', 'address', 'phone', 'email'];
+    protected $fillable = ['name', 'document_id', 'document_number', 'company_name', 'address', 'phone', 'email', 'status'];
 
     public function document()
     {
